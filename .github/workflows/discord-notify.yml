@@ -1,14 +1,16 @@
 name: Notify Discord on Push
 
-on: [push]
+on: push
 
 jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
       - name: Notify Discord
-        uses: peter-evans/discord-webhook@v1
+        uses: Ilshidur/action-discord@0.3.2
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with:
-          webhook-url: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "🚀 New push to **${{ github.repository }}** by `${{ github.actor }}`"
+          args: |
+            🚀 New push to **${{ github.repository }}** by `${{ github.actor }}`
 
