@@ -158,6 +158,8 @@ paths:
                 items:
                   type: object
                   properties:
+                    commentid:
+                      type: string
                     message:
                       type: string
                     username:
@@ -209,6 +211,8 @@ paths:
                 items:
                   type: object
                   properties:
+                    username:
+                      type: string
                     charactertype:
                       type: string
 
@@ -228,22 +232,6 @@ paths:
                     type: string
                   charactertype:
                     type: string
-      responses:
-        '200':
-          description: 登録成功
-
-  /conversation/select:
-    post:
-      summary: 会話相手選択
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                room_id:
-                  type: integer
       responses:
         '200':
           description: 登録成功
@@ -277,6 +265,8 @@ paths:
                 items:
                   type: object
                   properties:
+                    talkid:
+                      type: string
                     message:
                       type: string
                     username:
