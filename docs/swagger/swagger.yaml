@@ -1,0 +1,325 @@
+openapi: 3.0.3
+info:
+  title: Sample App API
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /session:
+    post:
+      summary: ユーザーセッション作成
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                userid:
+                  type: integer
+      responses:
+        '200':
+          description: セッション開始
+
+  /settings:
+    post:
+      summary: ユーザー設定登録
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blood_type:
+                  type: string
+                height:
+                  type: integer
+                birthday:
+                  type: string
+                  format: date
+                favorite_weather:
+                  type: string
+                favorite_color:
+                  type: string
+                dominant_hand:
+                  type: string
+      responses:
+        '200':
+          description: 登録成功
+    get:
+      summary: ユーザー設定取得
+      responses:
+        '200':
+          description: 設定情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  blood_type:
+                    type: string
+                  height:
+                    type: integer
+                  birthday:
+                    type: string
+                    format: date
+                  favorite_weather:
+                    type: string
+                  favorite_color:
+                    type: string
+                  dominant_hand:
+                    type: string
+                  character_type:
+                    type: string
+    put:
+      summary: ユーザー設定更新
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                blood_type:
+                  type: string
+                height:
+                  type: integer
+                birthday:
+                  type: string
+                  format: date
+                favorite_weather:
+                  type: string
+                favorite_color:
+                  type: string
+                dominant_hand:
+                  type: string
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      summary: ユーザー設定削除
+      responses:
+        '204':
+          description: 削除成功
+
+  /topics:
+    get:
+      summary: 掲示板トピック取得
+      responses:
+        '200':
+          description: トピック一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    roomid:
+                      type: integer
+                    title:
+                      type: string
+
+  /comments:
+    post:
+      summary: コメント投稿
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomid:
+                  type: integer
+                message:
+                  type: string
+      responses:
+        '200':
+          description: 投稿成功
+    get:
+      summary: コメント取得
+      parameters:
+        - name: roomid
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: コメント一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    username:
+                      type: string
+
+  /comments/{id}:
+    put:
+      summary: コメント更新
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      summary: コメント削除
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除成功
+
+  /packs:
+    get:
+      summary: パック取得（セッションユーザー）
+      responses:
+        '200':
+          description: パック情報
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    charactertype:
+                      type: string
+
+  /battle:
+    post:
+      summary: バトル情報送信
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  charactertype:
+                    type: string
+      responses:
+        '200':
+          description: 登録成功
+
+  /conversation/select:
+    post:
+      summary: 会話相手選択
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                room_id:
+                  type: integer
+      responses:
+        '200':
+          description: 登録成功
+
+  /conversation:
+    post:
+      summary: 会話投稿
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roomid:
+                  type: integer
+                message:
+                  type: string
+      responses:
+        '200':
+          description: 投稿成功
+    get:
+      summary: 会話取得
+      responses:
+        '200':
+          description: 会話一覧
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                    username:
+                      type: string
+
+  /conversation/{id}:
+    put:
+      summary: 会話更新
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      summary: 会話削除
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: 削除成功
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+security:
+  - sessionAuth: []
