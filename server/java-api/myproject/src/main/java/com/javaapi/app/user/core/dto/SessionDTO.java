@@ -2,9 +2,9 @@ package com.javaapi.app.user.core.dto;
 
 
 public class SessionDTO {
-    private String userId;
-    private String username;
-    private String email;
+    private final String userId;
+    private final String username;
+    private final String email;
 
     public SessionDTO(String userId, String username, String email) {
         this.userId = userId;

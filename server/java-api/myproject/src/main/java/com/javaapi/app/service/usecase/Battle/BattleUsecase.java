@@ -16,7 +16,6 @@ public class BattleUsecase {
     }
 
     public List<BattleDTO> getBattleUserDetails() {
-        // セッションやDB操作はこの中に後で実装する
 
         return battleUserFactory.createBattleUser(
             List.of(
