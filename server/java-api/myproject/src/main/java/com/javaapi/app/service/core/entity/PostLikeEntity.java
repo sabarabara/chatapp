@@ -22,7 +22,7 @@ import jakarta.persistence.Table;
 public class PostLikeEntity {
 
     @Id
-    private Integer id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -36,5 +36,26 @@ public class PostLikeEntity {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    
+    public PostLikeEntity() {}
+    public PostLikeEntity(String id, RoomEntity room, UserEntity user) {
+        this.id = id;
+        this.room = room;
+        this.user = user;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public RoomEntity getRoom() {
+        return room;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

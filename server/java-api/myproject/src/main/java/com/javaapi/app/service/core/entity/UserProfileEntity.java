@@ -19,7 +19,7 @@ public class UserProfileEntity {
 
     @Id
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Column(name = "blood_type")
     private String bloodType;
@@ -48,7 +48,7 @@ public class UserProfileEntity {
 
     // コンストラクタ省略可
 
-    public Integer getUserId() {
+    public String getUserId() {
         return userId;
     }
 

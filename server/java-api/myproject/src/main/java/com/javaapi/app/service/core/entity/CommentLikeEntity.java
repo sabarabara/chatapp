@@ -20,7 +20,7 @@ import jakarta.persistence.Table;
 public class CommentLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "message_id")
@@ -41,7 +41,7 @@ public class CommentLikeEntity {
         this.user = user;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 

@@ -1,12 +1,10 @@
 package com.javaapi.app.service.core.entity;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 // --- RoomTagEntity ---
 @Entity
@@ -25,5 +23,20 @@ public class RoomTagEntity {
     @JoinColumn(name = "tag_id")
     private TagEntity tag;
 
-    
+    public RoomTagEntity() {}
+    public RoomTagEntity(RoomEntity room, TagEntity tag) {
+        this.room = room;
+        this.tag = tag;
+        this.id = new RoomTagId(room.getId(), tag.getId());
+    }
+
+    public RoomTagId getId() {
+        return id;
+    }
+    public RoomEntity getRoom() {
+        return room;
+    }
+    public TagEntity getTag() {
+        return tag;
+    }
 }

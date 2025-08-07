@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class RoomMemberEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -24,4 +24,19 @@ public class RoomMemberEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public RoomMemberEntity() {}
+    public RoomMemberEntity(RoomEntity room, UserEntity user) {
+        this.room = room;
+        this.user = user;
+    }
+    public String getId() {
+        return id;
+    }
+    public RoomEntity getRoom() {
+        return room;
+    }
+    public UserEntity getUser() {
+        return user;
+    }
 }

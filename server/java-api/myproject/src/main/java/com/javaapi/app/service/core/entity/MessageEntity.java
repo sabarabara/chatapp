@@ -27,7 +27,7 @@ import jakarta.persistence.Table;
 public class MessageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -68,7 +68,7 @@ public class MessageEntity {
         this.content = content;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
