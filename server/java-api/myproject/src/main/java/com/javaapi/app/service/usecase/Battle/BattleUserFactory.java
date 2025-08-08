@@ -1,7 +1,6 @@
 package com.javaapi.app.service.usecase.Battle;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.javaapi.app.service.core.domain.model.vo.settings.CharacterType;
 import com.javaapi.app.service.core.dto.BattleDTO.BattleDTO;
@@ -24,6 +23,6 @@ public class BattleUserFactory {
                     characterType.name()
                 );
             })
-            .collect(Collectors.toList());
+            .toList();
     }
 }

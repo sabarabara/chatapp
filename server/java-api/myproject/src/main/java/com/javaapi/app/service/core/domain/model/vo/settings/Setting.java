@@ -3,7 +3,7 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 public class Setting {
 
     private final Birthday birthday;
-    private final BloodyType bloodyType;
+    private final BloodType bloodType;
     private final CharacterType characterType;
     private final DominantHand dominantHand;
     private final FavoriteColor favoriteColor;
@@ -12,14 +12,14 @@ public class Setting {
 
 
     public Setting(Birthday birthday,
-                   BloodyType bloodyType,
+                   BloodType bloodyType,
                    CharacterType characterType,
                    DominantHand dominantHand,
                    FavoriteColor favoriteColor,
                    FavoriteWeather favoriteWeather,
                    Height height) {
         this.birthday = birthday;
-        this.bloodyType = bloodyType;
+        this.bloodType = bloodyType;
         this.characterType = characterType;
         this.dominantHand = dominantHand;
         this.favoriteColor = favoriteColor;
@@ -27,13 +27,13 @@ public class Setting {
         this.height = height;
     }
 
-    // getter
+    
     public Birthday getBirthday() {
         return birthday;
     }
 
-    public BloodyType getBloodyType() {
-        return bloodyType;
+    public BloodType getBloodyType() {
+        return bloodType;
     }
 
     public CharacterType getCharacterType() {
