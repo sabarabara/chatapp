@@ -3,14 +3,14 @@ package com.javaapi.app.service.core.dto.SettingsDTO;
 public class SettingsOutDTO {
 
     private final String bloodType;
-    private final String height;
+    private final int height;
     private final String birthday;
     private final String favoriteWeather;
     private final String favoriteColor;
     private final String dominantHand;
     private final String characterType;
 
-    public SettingsOutDTO(String bloodType, String height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand , String characterType) {
+    public SettingsOutDTO(String bloodType, int height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand , String characterType) {
         this.bloodType = bloodType;
         this.height = height;
         this.birthday = birthday;
@@ -24,7 +24,7 @@ public class SettingsOutDTO {
     public String getBloodType() {
         return bloodType;
     }
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
     public String getBirthday() {

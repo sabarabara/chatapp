@@ -1,11 +1,11 @@
 package com.javaapi.app.user.usecase.Session;
-import org.springframework.session.Session;
-
 import com.javaapi.app.user.core.domain.model.vo.Email;
 import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.domain.model.vo.Username;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.framework.session.SessionStore;
+
+import jakarta.servlet.http.HttpSession;
 
 public class SessionUsecase{
 
@@ -18,17 +18,17 @@ public class SessionUsecase{
     }
 
 
-    public String createUserSession(SessionDTO sessionDTO,Session session){
+    public String createUserSession(SessionDTO sessionDTO,HttpSession session){
         sessionFactory.createUserSession(sessionDTO,session);
 
         return "OK";
     }
 
-    public SessionDTO getUserSession(Session session){
+    public SessionDTO getUserSession(HttpSession session){
 
-        String userid = sessionStore.getUserid(session);
-        String username = sessionStore.getUsername(session);
-        String email = sessionStore.getEmail(session);
+        String userid = sessionStore.getUserid(session).toString();
+        String username = sessionStore.getUsername(session).toString();
+        String email = sessionStore.getEmail(session).toString();
 
         Userid valUserid = new Userid(userid);
         Username valUsername = new Username(username);

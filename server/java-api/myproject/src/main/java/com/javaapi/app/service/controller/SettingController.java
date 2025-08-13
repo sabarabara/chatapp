@@ -12,6 +12,8 @@ import com.javaapi.app.service.core.dto.SettingsDTO.SettingsInDTO;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsOutDTO;
 import com.javaapi.app.service.usecase.Setting.SettingUsecase;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @RestController
 @RequestMapping("/setting")
@@ -23,26 +25,24 @@ public class SettingController {
     this.settingUsecase = settingUsecase;
   }
 
-
-
   
   @PostMapping("/create")
-  public String createSetting(@RequestBody SettingsInDTO settingsInDTO) {
-    return settingUsecase.createSetting(settingsInDTO);
+  public String createSetting(@RequestBody SettingsInDTO settingsInDTO,HttpSession session) {
+    return settingUsecase.createSetting(settingsInDTO,session);
   }
 
   @GetMapping("/read")
-  public SettingsOutDTO readSetting() {
-    return settingUsecase.readSetting();
+  public SettingsOutDTO readSetting(HttpSession session) {
+    return settingUsecase.readSetting(session);
   }
 
-  @PutMapping("/update")
-  public SettingsOutDTO updateSetting(@RequestBody SettingsInDTO settingsInDTO) {
-    return settingUsecase.updateSetting(settingsInDTO);
+  @PutMapping("/update")//とりあえずstring
+  public String updateSetting(@RequestBody SettingsInDTO settingsInDTO,HttpSession session) {
+    return settingUsecase.updateSetting(settingsInDTO,session);
   }
 
   @DeleteMapping("/delete")
-  public String deleteSetting() {
-    return settingUsecase.deleteSetting();
+  public String deleteSetting(HttpSession session) {
+    return settingUsecase.deleteSetting(session);
   }
 }

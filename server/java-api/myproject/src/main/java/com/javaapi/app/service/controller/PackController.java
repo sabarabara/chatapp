@@ -1,14 +1,16 @@
 package com.javaapi.app.service.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-
 import java.util.List;
 
-import com.javaapi.app.service.core.dto.PackDTO.PackDTO;
-import com.javaapi.app.service.usecase.PackUsecase;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import com.javaapi.app.service.core.dto.PackDTO.RandamPackDTO;
+import com.javaapi.app.service.core.dto.PackDTO.RecommnedPackDTO;
+import com.javaapi.app.service.usecase.Pack.PackUsecase;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/pack")
@@ -20,12 +22,12 @@ public class PackController{
   }
 
   @GetMapping("/randampack")
-  public List<PackDTO> getRandamPack() {
-    return packUsecase.getRandamPack();
+  public List<RandamPackDTO> getRandamPack(HttpSession session) {
+    return packUsecase.getRandamPack(session);
   }
 
   @GetMapping("/recommnedampack")
-  public List<PackDTO> getRecommendPack() {
-    return packUsecase.getRecommendPack();
+  public List<RecommnedPackDTO> getRecommendPack(HttpSession session) {
+    return packUsecase.getRecommendPack(session);
   }
 }

@@ -46,7 +46,17 @@ public class UserProfileEntity {
 
     public UserProfileEntity() {}
 
-    // コンストラクタ省略可
+    public UserProfileEntity(String userId, String bloodType, Integer height, LocalDate birthday,
+                             String favoriteWeather, String favoriteColor, String dominantHand, String characterType) {
+        this.userId = userId;
+        this.bloodType = bloodType;
+        this.height = height;
+        this.birthday = birthday;
+        this.favoriteWeather = favoriteWeather;
+        this.favoriteColor = favoriteColor;
+        this.dominantHand = dominantHand;
+        this.characterType = characterType;
+    }
 
     public String getUserId() {
         return userId;

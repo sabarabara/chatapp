@@ -11,7 +11,7 @@ public class BattleUserFactory {
     public BattleUserFactory() {
     }
 
-    public static List<BattleDTO> createBattleUser(List<BattleDTO> battleDTOList) {
+    public List<BattleDTO> createBattleUser(List<BattleDTO> battleDTOList) {
         return battleDTOList.stream()
             .map(dto -> {
 

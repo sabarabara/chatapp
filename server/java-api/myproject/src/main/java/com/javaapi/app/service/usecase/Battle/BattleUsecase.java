@@ -2,13 +2,14 @@ package com.javaapi.app.service.usecase.Battle;
 
 import java.util.List;
 
-import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IBattleRepository;
 import com.javaapi.app.service.core.dto.BattleDTO.BattleDTO;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class BattleUsecase {
@@ -23,7 +24,7 @@ public class BattleUsecase {
         this.battleRepository = battleRepository;
     }
 
-    public List<BattleDTO> getBattleUserDetails(Session session) {
+    public List<BattleDTO> getBattleUserDetails(HttpSession session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userId = sessionDTO.getUserId();
