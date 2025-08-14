@@ -17,10 +17,10 @@ int main() {
     });
 
     // POSTでJSONデータを受け取る
-    svr.Post("/submit", [](const httplib::Request& req, httplib::Response& res) {
+    svr.Post("/characterType", [](const httplib::Request& req, httplib::Response& res) {
         try {
             json j = json::parse(req.body);
-
+            cout<< "🐞Received JSON: " << j.dump(4) << endl;
             UserData user;
             from_json(j, user);
 
@@ -33,6 +33,6 @@ int main() {
         }
     });
 
-    cout << "C++ HTTP server running on http://localhost:8083\n";
-    svr.listen("0.0.0.0", 8083);
+    cout << "C++ HTTP server running on http://localhost:5000\n";
+    svr.listen("0.0.0.0", 5000);
 }

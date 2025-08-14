@@ -28,6 +28,7 @@ public class SettingController {
   
   @PostMapping("/create")
   public String createSetting(@RequestBody SettingsInDTO settingsInDTO,HttpSession session) {
+    System.out.println("🐞SettingController.createSetting() called");
     return settingUsecase.createSetting(settingsInDTO,session);
   }
 

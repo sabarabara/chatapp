@@ -7,22 +7,19 @@ plugins {
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
-
 repositories {
 	mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'  // ← これを追加
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-}
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.postgresql:postgresql:42.6.0'
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.123.Final:osx-aarch_64' // Mac M1/M2用
 
+}
 
 tasks.named('test') {
 	useJUnitPlatform()

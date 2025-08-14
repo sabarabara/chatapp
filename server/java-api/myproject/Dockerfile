@@ -6,5 +6,8 @@ COPY . .
 RUN apt-get update && apt-get install -y findutils
 RUN ./gradlew build
 
+EXPOSE 8080
+
+
 CMD ["java", "-jar", "build/libs/myproject-0.0.1-SNAPSHOT.jar"]
 

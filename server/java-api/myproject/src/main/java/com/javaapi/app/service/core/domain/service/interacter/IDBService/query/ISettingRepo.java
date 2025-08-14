@@ -5,5 +5,5 @@ import com.javaapi.app.service.core.entity.UserProfileEntity;
 
 public interface ISettingRepo extends JpaRepository<UserProfileEntity, String> {
 
-    UserProfileEntity findByUserid(String userId);
+    UserProfileEntity findByUserId(String userId);
 }

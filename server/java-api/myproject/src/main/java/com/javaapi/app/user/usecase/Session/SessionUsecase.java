@@ -1,4 +1,6 @@
 package com.javaapi.app.user.usecase.Session;
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.user.core.domain.model.vo.Email;
 import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.domain.model.vo.Username;
@@ -7,6 +9,8 @@ import com.javaapi.app.user.framework.session.SessionStore;
 
 import jakarta.servlet.http.HttpSession;
 
+
+@Service
 public class SessionUsecase{
 
     private final SessionFactory sessionFactory;

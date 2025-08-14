@@ -1,6 +1,8 @@
 package com.javaapi.app.service.usecase.Setting;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.command.IUserProfileRepo;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsInDTO;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsOutDTO;
@@ -13,7 +15,7 @@ import com.javaapi.app.user.usecase.Session.SessionUsecase;
 import jakarta.servlet.http.HttpSession;
 
 
-
+@Service
 public class SettingUsecase {
 
     private final SettingFactory settingFactory;
@@ -30,7 +32,8 @@ public class SettingUsecase {
 
     public String createSetting(SettingsInDTO settingsInDTO,HttpSession session) {
 
-        //pylogic
+        //cpplogic
+        System.out.println("🐞SettingUsecase.createSetting() called");
         String charaType = characterType.getCharacterType(settingsInDTO);
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);

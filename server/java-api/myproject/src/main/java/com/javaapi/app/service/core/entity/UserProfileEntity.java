@@ -6,15 +6,20 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.javaapi.app.user.core.entity.UserEntity;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "user_profiles")
-@EntityListeners(AuditingEntityListener.class) // ← これを追加！
+@EntityListeners(AuditingEntityListener.class)
 public class UserProfileEntity {
 
     @Id
@@ -44,6 +49,12 @@ public class UserProfileEntity {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    // ここを追加
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
     public UserProfileEntity() {}
 
     public UserProfileEntity(String userId, String bloodType, Integer height, LocalDate birthday,
@@ -58,6 +69,7 @@ public class UserProfileEntity {
         this.characterType = characterType;
     }
 
+    // getter/setter
     public String getUserId() {
         return userId;
     }
@@ -92,5 +104,13 @@ public class UserProfileEntity {
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public UserEntity getUser() {
+        return user;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 }

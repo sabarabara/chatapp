@@ -3,6 +3,8 @@ package com.javaapi.app.service.usecase.Setting;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.domain.model.vo.settings.Birthday;
 import com.javaapi.app.service.core.domain.model.vo.settings.BloodType;
 import com.javaapi.app.service.core.domain.model.vo.settings.CharacterType;
@@ -16,6 +18,7 @@ import com.javaapi.app.service.core.entity.UserProfileEntity;
 import com.javaapi.app.user.core.domain.model.vo.Userid;
 
 
+@Service
 public class SettingFactory {
 
     public UserProfileEntity createInformation(SettingsInDTO dto,String charaType,Userid userid) {

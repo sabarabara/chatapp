@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IPackRepo;
 import com.javaapi.app.service.core.dto.PackDTO.IRandamPackDTO;
@@ -17,6 +18,7 @@ import com.javaapi.app.user.usecase.Session.SessionUsecase;
 import jakarta.servlet.http.HttpSession;
 
 
+@Service
 public class PackUsecase {
 
   private final RecommendPackResult packResult;
