@@ -23,9 +23,10 @@ int main() {
             cout<< "🐞Received JSON: " << j.dump(4) << endl;
             UserData user;
             from_json(j, user);
-
+            cout << "Parsed UserData: " << user.blood_type << ", " << user.height << ", " << user.birthday << endl;
+            
             string charactertype = processUserData(user);  // algo.cpp で処理
-
+            cout<<"OK: " << charactertype << endl;
             res.set_content("User data received and processed.", "text/plain");
         } catch (const std::exception& e) {
             res.status = 400;

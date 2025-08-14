@@ -11,6 +11,7 @@ using namespace std;
 #include "algologic/favoritecolor/favoritecolor.h"
 #include "algologic/favoriteweather/favoriteweather.h"
 #include "algologic/height/height.h"
+#include "algologic/charactertypedecide/decidechara.h"
 
 
 
@@ -44,5 +45,6 @@ string processUserData(const UserData& user) {
 
 
   //ここからユークリッド距離の和の最少を導出
-  return "OK";//いったんここまで
+  string charactertype = decidecharacter(atr);
+  return charactertype;
 }

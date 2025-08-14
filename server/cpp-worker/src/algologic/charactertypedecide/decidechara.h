@@ -1,4 +1,7 @@
 #pragma once
 #include "../../data.h"
+#include <string>
+using namespace std;
 
-void decidecharacter(Attributes &atr);
+
+string decidecharacter(Attributes &atr);
