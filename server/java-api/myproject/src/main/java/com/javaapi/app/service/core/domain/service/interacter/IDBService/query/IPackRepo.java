@@ -1,6 +1,7 @@
 package com.javaapi.app.service.core.domain.service.interacter.IDBService.query;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import com.javaapi.app.service.core.dto.PackDTO.IRandamPackDTO;
 import com.javaapi.app.service.core.entity.RoomMemberEntity;
 
-public interface IPackRepo extends JpaRepository<RoomMemberEntity, String> {
+public interface IPackRepo extends JpaRepository<RoomMemberEntity, UUID> {
 
     @Query("""
         SELECT u.id AS userId, u.username AS username, p.characterType AS characterType
@@ -27,5 +28,5 @@ public interface IPackRepo extends JpaRepository<RoomMemberEntity, String> {
                 AND SIZE(r.members) = 2
           )
     """)
-    List<IRandamPackDTO> findUnmatchedUsers(@Param("userId") String userId, Pageable pageable);
+    List<IRandamPackDTO> findUnmatchedUsers(@Param("userId") UUID userId, Pageable pageable);
 }

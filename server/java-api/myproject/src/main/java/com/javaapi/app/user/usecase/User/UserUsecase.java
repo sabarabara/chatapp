@@ -1,9 +1,8 @@
 package com.javaapi.app.user.usecase.User;
 
-import java.util.UUID;
-
 import org.springframework.stereotype.Service;
 
+import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.domain.service.interacter.DBService.IUserRepo;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.core.dto.UserDTO;
@@ -35,8 +34,8 @@ public class UserUsecase {
     }
 
 
-    public String loginUser(UUID userid,HttpSession session) {
-        UserEntity userEntity = userRepo.findByUserid(userid);
+    public String loginUser(Userid userid,HttpSession session) {
+        UserEntity userEntity = userRepo.findByUserid(userid.getUserid());
 
         SessionDTO sessionDTO = new SessionDTO(
             userEntity.getUserid(),

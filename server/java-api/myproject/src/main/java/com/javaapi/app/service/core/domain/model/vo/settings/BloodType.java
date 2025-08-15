@@ -2,10 +2,10 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 
 public enum BloodType {
 
-    OTYPE("O-type"),
-    ATYPE("A-type"),
-    BTYPE("B-type"),
-    ABTYPE("AB-type");
+    O("O"),
+    A("A"),
+    B("B"),
+    AB("AB");
 
     private final String label;
 

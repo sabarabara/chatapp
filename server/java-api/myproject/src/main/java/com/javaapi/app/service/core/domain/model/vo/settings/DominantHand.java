@@ -2,9 +2,9 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 
 public enum DominantHand {
 
-    LEFT_HAND("Left Hand"),
-    RIGHT_HAND("Right Hand"),
-    AMBIDEXTROUS("Ambidextrous");
+    left("left"),
+    right("right"),
+    ambidextrous("ambidextrous");
 
 
     private final String handtype;

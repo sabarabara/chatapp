@@ -2,6 +2,7 @@ package com.javaapi.app.service.core.dto.SettingsDTO;
 
 public class SettingsOutDTO {
 
+    
     private final String bloodType;
     private final int height;
     private final String birthday;

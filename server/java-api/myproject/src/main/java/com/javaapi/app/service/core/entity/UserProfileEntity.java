@@ -2,6 +2,7 @@ package com.javaapi.app.service.core.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -11,6 +12,7 @@ import com.javaapi.app.user.core.entity.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
@@ -23,8 +25,9 @@ import jakarta.persistence.Table;
 public class UserProfileEntity {
 
     @Id
-    @Column(name = "user_id")
-    private String userId;
+    @GeneratedValue
+    @Column(name = "user_id", columnDefinition = "uuid")
+    private UUID userId;
 
     @Column(name = "blood_type")
     private String bloodType;
@@ -57,9 +60,8 @@ public class UserProfileEntity {
 
     public UserProfileEntity() {}
 
-    public UserProfileEntity(String userId, String bloodType, Integer height, LocalDate birthday,
+    public UserProfileEntity(String bloodType, Integer height, LocalDate birthday,
                              String favoriteWeather, String favoriteColor, String dominantHand, String characterType) {
-        this.userId = userId;
         this.bloodType = bloodType;
         this.height = height;
         this.birthday = birthday;
@@ -70,7 +72,7 @@ public class UserProfileEntity {
     }
 
     // getter/setter
-    public String getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 

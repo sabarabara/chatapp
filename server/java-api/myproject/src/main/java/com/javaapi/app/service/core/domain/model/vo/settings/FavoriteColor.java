@@ -3,13 +3,13 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 public enum FavoriteColor {
 
 
-    RED("Red"),
-    BLUE("Blue"),
-    GREEN("Green"),
-    YELLOW("Yellow"),
-    PURPLE("Purple"),
-    BLACK("Black"),
-    WHITE("White");
+    red("Red"),
+    blue("Blue"),
+    green("Green"),
+    yellow("Yellow"),
+    purple("Purple"),
+    black("Black"),
+    white("White");
 
 
     private final String color;

@@ -2,9 +2,9 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 
 public enum FavoriteWeather {
 
-    SUNNY("Sunny"),
-    RAINY("Rainy"),
-    CLOUDY("Cloudy");
+    sunny("Sunny"),
+    rainy("Rainy"),
+    cloudy("Cloudy");
 
     private final String weatherType;
 

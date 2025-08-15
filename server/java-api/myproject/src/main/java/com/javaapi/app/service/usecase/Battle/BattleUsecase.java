@@ -1,6 +1,7 @@
 package com.javaapi.app.service.usecase.Battle;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class BattleUsecase {
     public List<BattleDTO> getBattleUserDetails(HttpSession session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        String userId = sessionDTO.getUserId();
+        UUID userId = sessionDTO.getUserId();
 
         List<BattleDTO> battleDTOs = battleRepository.findOneToOneConversationPartners(userId);
         List<BattleDTO> validbattleDTO = battleUserFactory.createBattleUser(battleDTOs);

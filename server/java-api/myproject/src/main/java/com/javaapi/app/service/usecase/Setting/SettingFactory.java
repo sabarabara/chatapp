@@ -44,7 +44,8 @@ public class SettingFactory {
             height
     );
 
-    String validUserId = userid.getUserid();
+    //UUID validUserId = userid.getUserid();
+
 
     String validBirthday = setting.getBirthday().getDate();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
@@ -60,7 +61,7 @@ public class SettingFactory {
 
 
 
-    UserProfileEntity userProfileEntity = new UserProfileEntity(validUserId,validBloodType,validheight,persedBirthday,validfavoriteweather,validfavoritecolor,validdominantHand,validCharacterType);
+    UserProfileEntity userProfileEntity = new UserProfileEntity(validBloodType,validheight,persedBirthday,validfavoriteweather,validfavoritecolor,validdominantHand,validCharacterType);
 
     return userProfileEntity;
     }

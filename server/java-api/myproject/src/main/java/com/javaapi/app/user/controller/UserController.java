@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.dto.UserDTO;
 import com.javaapi.app.user.usecase.User.UserUsecase;
 
@@ -28,7 +29,7 @@ public class UserController {
     };
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody UUID userid,HttpSession session) {
+    public String loginUser(@RequestBody Userid userid,HttpSession session) {
         return userUsecase.loginUser(userid, session);
 }
 }

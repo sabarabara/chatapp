@@ -3,13 +3,17 @@ package com.javaapi.app.service.core.domain.model.vo.settings;
 
 public enum CharacterType {
 
-    //ここで決まったら設定
-
-    WARRIOR("Warrior"),
-    MAGE("Mage"),
-    ROGUE("Rogue");
-
-
+    Swordsman("Swordsman"),
+    Mage("Mage"),
+    Knight("Knight"),
+    Ninja("Ninja"),
+    Thief("Thief"),
+    Archer("Archer"),
+    Clown("Clown"),
+    Berserker("Berserker"),
+    Bard("Bard"),
+    Alchemist("Alchemist"),
+    Priest("Priest");
 
     private final String type;
 
