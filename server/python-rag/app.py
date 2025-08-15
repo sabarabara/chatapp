@@ -10,6 +10,7 @@ from src.route import setup_routes
 
 app = Flask(__name__)
 
+
 run_migration()
 setup_routes(app)
 
