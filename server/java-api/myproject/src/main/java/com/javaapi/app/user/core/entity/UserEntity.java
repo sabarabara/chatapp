@@ -1,5 +1,6 @@
 package com.javaapi.app.user.core.entity;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -11,6 +12,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -22,7 +24,9 @@ import jakarta.persistence.Table;
 public class UserEntity {
 
     @Id
-    private String userid;
+    @GeneratedValue
+    @Column(name = "userid", columnDefinition = "uuid")
+    private UUID userid;
 
     private String username;
     private String email;
@@ -35,9 +39,6 @@ public class UserEntity {
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
-    @Column(name = "avatar_url", columnDefinition = "TEXT")
-    private String avatarUrl;
-
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserProfileEntity profile;
 
@@ -45,14 +46,13 @@ public class UserEntity {
 
     public UserEntity() {}
 
-    public UserEntity(String userid, String username, String email, String avatarUrl) {
+    public UserEntity(String username, String email) {
         this.userid = userid;
         this.username = username;
         this.email = email;
-        this.avatarUrl = avatarUrl;
     }
 
-    public String getUserid() {
+    public UUID getUserid() {
         return userid;
     }
 
@@ -70,9 +70,5 @@ public class UserEntity {
 
     public LocalDateTime getLastLoginAt() {
         return lastLoginAt;
-    }
-
-    public String getAvatarUrl() {
-        return avatarUrl;
     }
 }

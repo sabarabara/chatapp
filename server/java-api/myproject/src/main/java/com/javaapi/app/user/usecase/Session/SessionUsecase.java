@@ -1,4 +1,5 @@
 package com.javaapi.app.user.usecase.Session;
+
 import org.springframework.stereotype.Service;
 
 import com.javaapi.app.user.core.domain.model.vo.Email;
