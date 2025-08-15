@@ -2,13 +2,14 @@ package com.javaapi.app.service.core.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ReadStatusId implements Serializable {
-    private String roomId;
-    private String userId;
+    private UUID roomId;
+    private UUID userId;
 
     
     @Override

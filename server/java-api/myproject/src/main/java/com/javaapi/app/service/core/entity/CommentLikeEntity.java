@@ -1,5 +1,6 @@
 package com.javaapi.app.service.core.entity;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 
@@ -19,8 +20,8 @@ import jakarta.persistence.Table;
 @Table(name = "comment_likes")
 public class CommentLikeEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "message_id")
@@ -41,7 +42,7 @@ public class CommentLikeEntity {
         this.user = user;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

@@ -2,17 +2,18 @@ package com.javaapi.app.service.core.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import jakarta.persistence.Embeddable;
 
 
 @Embeddable
 public class RoomTagId implements Serializable {
-    private String roomId;
-    private String tagId;
+    private UUID roomId;
+    private UUID tagId;
 
     public RoomTagId() {}
-    public RoomTagId(String roomId, String tagId) {
+    public RoomTagId(UUID roomId, UUID tagId) {
         this.roomId = roomId;
         this.tagId = tagId;
     }

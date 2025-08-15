@@ -2,6 +2,7 @@ package com.javaapi.app.service.core.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -26,8 +27,8 @@ import jakarta.persistence.Table;
 @EntityListeners(AuditingEntityListener.class)
 public class MessageEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -68,7 +69,7 @@ public class MessageEntity {
         this.content = content;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

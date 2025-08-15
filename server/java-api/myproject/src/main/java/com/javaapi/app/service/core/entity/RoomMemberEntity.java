@@ -1,4 +1,6 @@
 package com.javaapi.app.service.core.entity;
+import java.util.UUID;
+
 import com.javaapi.app.user.core.entity.UserEntity;
 
 import jakarta.persistence.Entity;
@@ -14,8 +16,8 @@ import jakarta.persistence.Table;
 @Table(name = "room_members")
 public class RoomMemberEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
@@ -30,7 +32,7 @@ public class RoomMemberEntity {
         this.room = room;
         this.user = user;
     }
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     public RoomEntity getRoom() {

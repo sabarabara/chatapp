@@ -1,6 +1,7 @@
 package com.javaapi.app.service.core.entity;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,8 +15,8 @@ import jakarta.persistence.Table;
 @Table(name = "tags")
 public class TagEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     private String name;
 
     @OneToMany(mappedBy = "tag")
@@ -25,7 +26,7 @@ public class TagEntity {
     public TagEntity(String name) {
         this.name = name;
     }
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     public String getName() {

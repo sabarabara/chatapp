@@ -1,10 +1,12 @@
 package com.javaapi.app.service.core.entity;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.springframework.data.annotation.CreatedDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -14,7 +16,8 @@ import jakarta.persistence.Table;
 @Table(name = "attachments")
 public class AttachmentEntity {
     @Id
-    private String id;
+    @GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne
     @JoinColumn(name = "message_id")
@@ -35,7 +38,7 @@ public class AttachmentEntity {
 
     public AttachmentEntity() {}
 
-    public AttachmentEntity(String id, MessageEntity message, String fileUrl, String fileType, Integer fileSize) {
+    public AttachmentEntity(UUID id, MessageEntity message, String fileUrl, String fileType, Integer fileSize) {
         this.id = id;
         this.message = message;
         this.fileUrl = fileUrl;
@@ -45,7 +48,7 @@ public class AttachmentEntity {
 
 
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
     public MessageEntity getMessage() {

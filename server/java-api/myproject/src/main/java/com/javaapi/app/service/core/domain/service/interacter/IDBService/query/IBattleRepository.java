@@ -13,7 +13,7 @@ import com.javaapi.app.service.core.entity.RoomMemberEntity;
 public interface IBattleRepository extends JpaRepository<RoomMemberEntity, UUID> {
 
     @Query("""
-        SELECT u.id AS userId, u.username AS username, p.characterType AS characterType
+        SELECT u.username AS username, p.characterType AS characterType
         FROM RoomEntity r
         JOIN r.members rm1
         JOIN r.members rm2
