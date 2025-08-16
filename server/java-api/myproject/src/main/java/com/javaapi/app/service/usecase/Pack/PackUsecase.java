@@ -45,20 +45,25 @@ public class PackUsecase {
     public List<RandamPackDTO> getRandamPack(HttpSession session) {
       SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
       UUID userId = sessionDTO.getUserId();
+      Userid validUserId = new Userid(userId);
 
       List<IRandamPackDTO> packDTOs = packRepo.findUnmatchedUsers(userId, pageable);
-      List<RandamPackDTO> randamPacks = randamPackFactory.createRandamPacks(packDTOs);
+      List<RandamPackDTO> randamPacks = randamPackFactory.createRandamPacks(packDTOs, validUserId);
 
       return randamPacks;
     }
 
+
+
+
+
     public List<RecommnedPackDTO> getRecommendPack(HttpSession session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         UUID userId = sessionDTO.getUserId();
-        Userid validuserid = new Userid(userId);
+        Userid validUserId = new Userid(userId);
 
-        List<RecievedPackDTO> recommendedPacks = packResult.getRecommendedPack(validuserid);
-        List<RecommnedPackDTO> validRecommendedPacks = recommendPackFactory.createRecommendPacks(recommendedPacks);
+        List<RecievedPackDTO> recommendedPacks = packResult.getRecommendedPack(validUserId);
+        List<RecommnedPackDTO> validRecommendedPacks = recommendPackFactory.createRecommendPacks(recommendedPacks, validUserId);
         return validRecommendedPacks;
     }
 }

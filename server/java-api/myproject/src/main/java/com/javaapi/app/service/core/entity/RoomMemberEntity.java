@@ -41,4 +41,12 @@ public class RoomMemberEntity {
     public UserEntity getUser() {
         return user;
     }
+
+    public void setRoom(RoomEntity room) {
+        this.room = room;
+    }
+
+    public void setUser(UserEntity user) {
+        this.user = user;
+    }
 }

@@ -20,19 +20,22 @@ public class RecommendPackFactory {
 
     private final IUserRepo userRepo;
     private final IUserProfileRepo userProfileRepo;
+    private final LinkUserService linkUserService;
 
-    public RecommendPackFactory(IUserRepo userRepo, IUserProfileRepo userProfileRepo) {
+    public RecommendPackFactory(IUserRepo userRepo, IUserProfileRepo userProfileRepo, LinkUserService linkUserService) {
         this.userRepo = userRepo;
         this.userProfileRepo = userProfileRepo;
+        this.linkUserService = linkUserService;
     }
 
 
-    public List<RecommnedPackDTO> createRecommendPacks(List<RecievedPackDTO> recommendedPacks) {
+    public List<RecommnedPackDTO> createRecommendPacks(List<RecievedPackDTO> recommendedPacks, Userid userId) {
         return recommendedPacks.stream()
                 .map(dto -> {
 
                     Userid validUserid = new Userid(dto.getUserId());
-                    System.out.println("🐞RecommendPackFactory.createRecommendPacks() validUserid: " + validUserid.getUserid());
+                    // ユーザーのルームを作成するのだ
+                    linkUserService.linkUsersInNewRoom(validUserid.getUserid(), userId.getUserid());
 
                     //とりあえず前取得,あとで最適化
                     UserEntity userEntity = userRepo.findByUserid(validUserid.getUserid());
