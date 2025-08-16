@@ -5,4 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.javaapi.app.service.core.entity.UserProfileEntity;
 
-public interface IUserProfileRepo extends JpaRepository<UserProfileEntity, UUID> {}
+public interface IUserProfileRepo extends JpaRepository<UserProfileEntity, UUID> {
+    UserProfileEntity findByUserId(UUID userId);
+}

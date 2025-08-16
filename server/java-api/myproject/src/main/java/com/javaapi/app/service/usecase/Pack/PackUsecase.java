@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IPackRepo;
 import com.javaapi.app.service.core.dto.PackDTO.IRandamPackDTO;
 import com.javaapi.app.service.core.dto.PackDTO.RandamPackDTO;
+import com.javaapi.app.service.core.dto.PackDTO.RecievedPackDTO;
 import com.javaapi.app.service.core.dto.PackDTO.RecommnedPackDTO;
 import com.javaapi.app.service.framework.packresult.RecommendPackResult;
 import com.javaapi.app.user.core.domain.model.vo.Userid;
@@ -56,7 +57,7 @@ public class PackUsecase {
         UUID userId = sessionDTO.getUserId();
         Userid validuserid = new Userid(userId);
 
-        List<RecommnedPackDTO> recommendedPacks = packResult.getRecommendedPack(validuserid);
+        List<RecievedPackDTO> recommendedPacks = packResult.getRecommendedPack(validuserid);
         List<RecommnedPackDTO> validRecommendedPacks = recommendPackFactory.createRecommendPacks(recommendedPacks);
         return validRecommendedPacks;
     }

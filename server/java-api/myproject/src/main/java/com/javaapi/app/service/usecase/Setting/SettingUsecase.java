@@ -4,14 +4,17 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.javaapi.app.service.core.domain.model.vo.settings.SendText;
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.command.IUserProfileRepo;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsInDTO;
+import com.javaapi.app.service.core.dto.SettingsDTO.SettingsIn_textDTO;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsOutDTO;
 import com.javaapi.app.service.core.entity.UserProfileEntity;
 import com.javaapi.app.service.framework.choosecharacterType.DecideCharacterType;
+import com.javaapi.app.service.framework.packresult.RecommendPackResult;
 import com.javaapi.app.user.core.domain.model.vo.Userid;
+import com.javaapi.app.user.core.domain.service.interacter.DBService.IUserRepo;
 import com.javaapi.app.user.core.dto.SessionDTO;
-import com.javaapi.app.user.core.dto.UserDTO;
 import com.javaapi.app.user.core.entity.UserEntity;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 import com.javaapi.app.user.usecase.User.UserFactory;
@@ -27,16 +30,31 @@ public class SettingUsecase {
     private final DecideCharacterType characterType;
     private final SessionUsecase sessionUsecase;
     private final UserFactory userFactory;
+    private final RecommendPackResult recommendPackResult;
+    private final IUserRepo userRepository;
 
-    public SettingUsecase(SettingFactory settingFactory ,IUserProfileRepo userProfileRepo, DecideCharacterType characterType, SessionUsecase sessionUsecase, UserFactory userFactory) {
+    public SettingUsecase(SettingFactory settingFactory ,IUserProfileRepo userProfileRepo, DecideCharacterType characterType, SessionUsecase sessionUsecase, UserFactory userFactory, RecommendPackResult recommendPackResult, IUserRepo userRepository) {
         this.settingFactory = settingFactory;
         this.userProfileRepo = userProfileRepo;
         this.characterType = characterType;
         this.sessionUsecase = sessionUsecase;
         this.userFactory = userFactory;
+        this.recommendPackResult = recommendPackResult;
+        this.userRepository = userRepository;
     }
 
-    public String createSetting(SettingsInDTO settingsInDTO,HttpSession session) {
+    public String createSetting(SettingsIn_textDTO settingsIn_textDTO,HttpSession session) {
+
+        
+        SettingsInDTO settingsInDTO = new SettingsInDTO(
+            settingsIn_textDTO.getBloodType(),
+            settingsIn_textDTO.getHeight(),
+            settingsIn_textDTO.getBirthday(),
+            settingsIn_textDTO.getFavoriteWeather(),
+            settingsIn_textDTO.getFavoriteColor(),
+            settingsIn_textDTO.getDominantHand()
+        );
+
 
         //cpplogic
         String charaType = characterType.getCharacterType(settingsInDTO);
@@ -44,22 +62,24 @@ public class SettingUsecase {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         UUID userid = sessionDTO.getUserId();
         Userid validUserid = new Userid(userid);
+
+        //pylogic
+        String text = settingsIn_textDTO.getText();
+        SendText sendText = new SendText(text);
+        String registerHobbyResult = recommendPackResult.registerHobby(validUserid, sendText.getText());
+        System.out.println("🐞SettingUsecase.createSetting() registerHobbyResult: " + registerHobbyResult);
         
 
         //factory
         UserProfileEntity settingEntity = settingFactory.createInformation(settingsInDTO, charaType,validUserid);
 
         //repo
+        
+        UserEntity userEntity = userRepository.findById(validUserid.getUserid())
+        .orElseThrow(() -> new IllegalArgumentException("指定されたユーザーは存在しません: " + validUserid.getUserid()));
 
-        //dto作成
-        UserDTO userDTO = new UserDTO(
-            sessionDTO.getUsername(),
-            sessionDTO.getEmail()
-        );
-        UserEntity userEntity = userFactory.createUser(userDTO);
         settingEntity.setUser(userEntity);
 
-        //repo作成
         userProfileRepo.save(settingEntity);
         return "OK";
     }

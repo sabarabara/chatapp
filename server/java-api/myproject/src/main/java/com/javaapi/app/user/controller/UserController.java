@@ -1,6 +1,5 @@
 package com.javaapi.app.user.controller;
 
-import java.util.UUID;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

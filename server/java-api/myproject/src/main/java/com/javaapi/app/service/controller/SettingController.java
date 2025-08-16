@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsInDTO;
+import com.javaapi.app.service.core.dto.SettingsDTO.SettingsIn_textDTO;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsOutDTO;
 import com.javaapi.app.service.usecase.Setting.SettingUsecase;
 
@@ -27,9 +28,9 @@ public class SettingController {
 
   
   @PostMapping("/create")
-  public String createSetting(@RequestBody SettingsInDTO settingsInDTO,HttpSession session) {
+  public String createSetting(@RequestBody SettingsIn_textDTO settingsIn_textDTO,HttpSession session) {
     System.out.println("🐞SettingController.createSetting() called");
-    return settingUsecase.createSetting(settingsInDTO,session);
+    return settingUsecase.createSetting(settingsIn_textDTO,session);
   }
 
   @GetMapping("/read")
