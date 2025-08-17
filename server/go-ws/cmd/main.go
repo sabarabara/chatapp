@@ -1,39 +1,36 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
-	"net/http"
-	"github.com/gorilla/websocket"
+
+	controllers "go-ws/internal/app/controller"
+	hub "go-ws/internal/app/framnework/redis"
+	redispkg "go-ws/pkg/config/redis"
+
+	"github.com/gin-gonic/gin"
 )
 
-var upgrader = websocket.Upgrader{}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	conn, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		log.Println("upgrade error:", err)
-		return
-	}
-	defer conn.Close()
-
-	for {
-		mt, message, err := conn.ReadMessage()
-		if err != nil {
-			log.Println("read error:", err)
-			break
-		}
-		log.Printf("recv: %s", message)
-		err = conn.WriteMessage(mt, message)
-		if err != nil {
-			log.Println("write error:", err)
-			break
-		}
-	}
-}
-
 func main() {
-	http.HandleFunc("/ws", handler)
-	fmt.Println("WebSocket server started at :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	// Redis クライアント作成
+	rdb := redispkg.NewRedisClient("localhost:6379")
+
+	// Redis 接続確認
+	ctx := context.Background()
+	if _, err := rdb.Ping(ctx); err != nil {
+		log.Fatalf("Failed to connect to Redis: %v", err)
+	} else {
+		log.Println("Connected to Redis successfully")
+	}
+
+	// Hub 初期化
+	h := hub.NewHub(rdb)
+
+	// Controller 初期化
+	ctrl := controllers.NewChatController(h)
+
+	// Gin サーバー
+	r := gin.Default()
+	r.GET("/ws", ctrl.HandleWebSocket)
+	r.Run(":8080")
 }
