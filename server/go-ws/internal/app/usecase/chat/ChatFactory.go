@@ -1,1 +1,44 @@
 package chat
+
+import (
+	vo "go-ws/internal/app/core/domain/model/vo/chat"
+	"go-ws/internal/app/core/dto/chat"
+)
+
+type ChatFactory struct{}
+
+func NewChatFactory() *ChatFactory {
+	return &ChatFactory{}
+}
+
+func (f *ChatFactory) ValidatedInUser(dto *chat.MessageInDTO) (*chat.MessageInDTO, error) {
+
+	messageid := dto.GetMessageID()
+	messageinfo := dto.GetMessage()
+	userid := dto.GetUserID()
+	isPersonal := dto.IsPersonal()
+	username := dto.GetUsername()
+
+	validmsgid := vo.NewMessageId(messageid)
+	validmsginfo := vo.NewMessage(messageinfo)
+	validuserid := vo.NewUserId(userid)
+	validusername := vo.NewUsername(username)
+
+	validmegdto := chat.NewMessageInDTO(validmsgid.GetId(), validmsginfo.GetContent(), validuserid.GetId(), isPersonal, validusername.GetUsername())
+
+	return validmegdto, nil
+}
+
+func (f *ChatFactory) ValidatedOutUser(dto *chat.MessageOutDTO) (*chat.MessageOutDTO, error) {
+
+	roomid := dto.GetRoomID()
+	message := dto.GetMessage()
+	userid := dto.GetUserID()
+
+	validroomid := vo.NewRoomId(roomid)
+	validmessage := vo.NewMessage(message)
+	validuserid := vo.NewUserId(userid)
+
+	validmegdto := chat.NewMessageOutDTO(validroomid.GetId(), validmessage.GetContent(), validuserid.GetId())
+	return validmegdto, nil
+}
