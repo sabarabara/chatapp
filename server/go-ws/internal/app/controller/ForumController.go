@@ -13,12 +13,12 @@ import (
 )
 
 type ForumController struct {
-	Hub         *hub.Hub
 	ForumUsecase *forum.ForumUsecase
+	HubManager   *hub.HubManager
 }
 
-func NewForumController(h *hub.Hub, cu *forum.ForumUsecase) *ForumController {
-	return &ForumController{Hub: h, ForumUsecase: cu}
+func NewForumController(cu *forum.ForumUsecase, hm *hub.HubManager) *ForumController {
+	return &ForumController{ForumUsecase: cu, HubManager: hm}
 }
 
 func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
@@ -28,13 +28,12 @@ func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
 		return
 	}
 	client := &hub.Client{Send: make(chan []byte, 256)}
-	f.Hub.Clients[client] = true
 
 	// client->hub
 	go func() {
 		defer func() {
 			conn.Close()
-			delete(f.Hub.Clients, client)
+			f.HubManager.RemoveClientFromAllHubs(client)
 		}()
 
 		for {
@@ -49,8 +48,16 @@ func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
 				continue
 			}
 
+			// roomID に紐づく Hub を取得（存在しなければ作る）
+			roomHub := f.HubManager.GetOrCreateHub(msgDTO.GetRoomID().String())
+
+			// クライアントを Hub に登録（初回のみ）
+			if _, exists := roomHub.Clients[client]; !exists {
+				roomHub.Clients[client] = true
+			}
+
 			// Usecaseに渡す
-			_, err = f.ForumUsecase.SendMessage(&msgDTO)
+			_, err = f.ForumUsecase.SendMessage(&msgDTO, roomHub)
 			if err != nil {
 				log.Println("send message error:", err)
 			}

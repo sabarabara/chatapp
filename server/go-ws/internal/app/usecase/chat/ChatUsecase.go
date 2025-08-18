@@ -11,14 +11,12 @@ import (
 type ChatUsecase struct {
 	factory *ChatFactory
 	api     *api.ChatAPIserver
-	h       *hub.Hub
 }
 
-func NewChatUsecase(factory *ChatFactory, api *api.ChatAPIserver, h *hub.Hub) *ChatUsecase {
+func NewChatUsecase(factory *ChatFactory, api *api.ChatAPIserver) *ChatUsecase {
 	return &ChatUsecase{
 		factory: factory,
 		api:     api,
-		h:       h,
 	}
 }
 
@@ -34,7 +32,7 @@ func (uc *ChatUsecase) FetchChatInformation(dto *chat.ChatInformDTO) (string, er
 
 /////////////////////////////////////////////////////////////////////////////////
 
-func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO) (string, error) {
+func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO, roomHub *hub.Hub) (string, error) {
 	validatedDTO, err := uc.factory.ValidatedOutUser(dto)
 	if err != nil {
 		return "", err
@@ -48,7 +46,7 @@ func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO) (string, error) {
 		log.Println("marshal error:", err)
 		return "", err
 	}
-	uc.h.Broadcast <- msgBytes
+	roomHub.Broadcast <- msgBytes
 
 	return "OK", nil
 }

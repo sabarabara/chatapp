@@ -19,10 +19,16 @@ func NewHubManager(redis ICachehub.PubSubClient) *HubManager {
 
 func (m *HubManager) GetOrCreateHub(roomID string) *Hub {
     if hub, exists := m.Hubs[roomID]; exists {
-        return hub // 既存の Hub を返す
+        return hub
     }
 
     hub := NewHub(roomID, m.Redis)
     m.Hubs[roomID] = hub
     return hub
+}
+
+func (m *HubManager) RemoveClientFromAllHubs(client *Client) {
+    for _, hub := range m.Hubs {
+		delete(hub.Clients, client)
+    }
 }

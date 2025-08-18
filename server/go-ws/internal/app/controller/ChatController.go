@@ -13,13 +13,12 @@ import (
 )
 
 type ChatController struct {
-	Hub         *hub.Hub
 	ChatUsecase *chat.ChatUsecase
 	HubManager  *hub.HubManager
 }
 
-func NewChatController(h *hub.Hub, cu *chat.ChatUsecase, hm *hub.HubManager) *ChatController {
-	return &ChatController{Hub: h, ChatUsecase: cu, HubManager: hm}
+func NewChatController(cu *chat.ChatUsecase, hm *hub.HubManager) *ChatController {
+	return &ChatController{ChatUsecase: cu, HubManager: hm}
 }
 
 func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
@@ -28,14 +27,17 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 		log.Println("upgrade error:", err)
 		return
 	}
+
+	// Client を作成（Send channel は必須）
 	client := &hub.Client{Send: make(chan []byte, 256)}
-	c.Hub.Clients[client] = true
 
 	// client->hub
 	go func() {
 		defer func() {
 			conn.Close()
-			delete(c.Hub.Clients, client)
+
+
+			c.HubManager.RemoveClientFromAllHubs(client)
 		}()
 
 		for {
@@ -50,16 +52,16 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 				continue
 			}
 
-			// roomID に紐づく Hub を取得
-			hub := c.HubManager.GetOrCreateHub(msgDTO.GetRoomID().String())
+			// roomID に紐づく Hub を取得（存在しなければ作る）
+			roomHub := c.HubManager.GetOrCreateHub(msgDTO.GetRoomID().String())
 
 			// クライアントを Hub に登録（初回のみ）
-			if _, exists := hub.Clients[client]; !exists {
-				hub.Clients[client] = true
+			if _, exists := roomHub.Clients[client]; !exists {
+				roomHub.Clients[client] = true
 			}
 
-			// Usecaseに渡す
-			_, err = c.ChatUsecase.SendMessage(&msgDTO)
+			// Usecase に渡す
+			_, err = c.ChatUsecase.SendMessage(&msgDTO, roomHub)
 			if err != nil {
 				log.Println("send message error:", err)
 			}
@@ -69,18 +71,23 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 	// hub->client
 	go func() {
 		defer conn.Close()
-		msgdto, err := c.ChatUsecase.ValidateInUser(client)
-		if err != nil {
-			log.Println("invalid message format:", err)
-			return
-		}
+		for {
+			// ここは client に送られる Hub メッセージを待つ
+			msgDTO, err := c.ChatUsecase.ValidateInUser(client)
+			if err != nil {
+				log.Println("invalid message format:", err)
+				break
+			}
 
-		msgBytes, err := json.Marshal(msgdto)
-		if err != nil {
-			log.Println("marshal error:", err)
-			return
-		}
+			msgBytes, err := json.Marshal(msgDTO)
+			if err != nil {
+				log.Println("marshal error:", err)
+				break
+			}
 
-		conn.WriteMessage(websocket.TextMessage, msgBytes)
+			if err := conn.WriteMessage(websocket.TextMessage, msgBytes); err != nil {
+				break
+			}
+		}
 	}()
 }

@@ -11,14 +11,12 @@ import (
 type ForumUsecase struct {
 	factory *ForumFactory
 	api     *api.ForumAPIServer
-	h       *hub.Hub
 }
 
-func NewForumUsecase(factory *ForumFactory, api *api.ForumAPIServer, h *hub.Hub) *ForumUsecase {
+func NewForumUsecase(factory *ForumFactory, api *api.ForumAPIServer) *ForumUsecase {
 	return &ForumUsecase{
 		factory: factory,
 		api:     api,
-		h:       h,
 	}
 }
 
@@ -32,7 +30,7 @@ func (uc *ForumUsecase) FetchForumInformation(dto *forum.ForumInformDTO) (string
 }
 
 // //////////////////////////////////////////////////////////////////////////////////
-func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO) (string, error) {
+func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO, roomHub *hub.Hub) (string, error) {
 	validatedDTO, err := uc.factory.ValidatedOutForumUser(dto)
 	if err != nil {
 		return "", err
@@ -41,12 +39,12 @@ func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO) (string, error) {
 	uc.api.SendMessage(validatedDTO)
 
 	//dbに接続,入れ込みOKならbroadcast これどっちの方がいいのかな？早い方がいいのか？
-	msgBytes, err := json.Marshal(dto)
+	msgBytes, err := json.Marshal(validatedDTO)
 	if err != nil {
 		log.Println("marshal error:", err)
 		return "", err
 	}
-	uc.h.Broadcast <- msgBytes
+	roomHub.Broadcast <- msgBytes
 
 	return "OK", nil
 }
