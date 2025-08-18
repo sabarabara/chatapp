@@ -1,29 +1,29 @@
 package controllers
 
 import (
-    "log"
-    "net/http"
+	"encoding/json"
+	"go-ws/internal/app/controller/ws"
+	dto "go-ws/internal/app/core/dto/chat"
+	hub "go-ws/internal/app/framnework/redis"
+	"go-ws/internal/app/usecase/chat"
+	"log"
 
-    "github.com/gin-gonic/gin"
-    "github.com/gorilla/websocket"
-
-	"go-ws/internal/app/framnework/redis"
+	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool { return true },
-}
-
 type ChatController struct {
-	Hub *hub.Hub
+	Hub         *hub.Hub
+	ChatUsecase *chat.ChatUsecase
+	HubManager  *hub.HubManager
 }
 
-func NewChatController(h *hub.Hub) *ChatController {
-	return &ChatController{Hub: h}
+func NewChatController(h *hub.Hub, cu *chat.ChatUsecase, hm *hub.HubManager) *ChatController {
+	return &ChatController{Hub: h, ChatUsecase: cu, HubManager: hm}
 }
 
 func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
-	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	conn, err := ws.Upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		log.Println("upgrade error:", err)
 		return
@@ -31,28 +31,56 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 	client := &hub.Client{Send: make(chan []byte, 256)}
 	c.Hub.Clients[client] = true
 
-	// 受信
+	// client->hub
 	go func() {
 		defer func() {
 			conn.Close()
 			delete(c.Hub.Clients, client)
 		}()
+
 		for {
-			_, msg, err := conn.ReadMessage()
+			_, msgBytes, err := conn.ReadMessage()
 			if err != nil {
 				break
 			}
-			c.Hub.Broadcast <- msg
+
+			var msgDTO dto.MessageOutDTO
+			if err := json.Unmarshal(msgBytes, &msgDTO); err != nil {
+				log.Println("invalid message format:", err)
+				continue
+			}
+
+			// roomID に紐づく Hub を取得
+			hub := c.HubManager.GetOrCreateHub(msgDTO.GetRoomID().String())
+
+			// クライアントを Hub に登録（初回のみ）
+			if _, exists := hub.Clients[client]; !exists {
+				hub.Clients[client] = true
+			}
+
+			// Usecaseに渡す
+			_, err = c.ChatUsecase.SendMessage(&msgDTO)
+			if err != nil {
+				log.Println("send message error:", err)
+			}
 		}
 	}()
 
-	// 送信
+	// hub->client
 	go func() {
 		defer conn.Close()
-		for msg := range client.Send {
-			if err := conn.WriteMessage(websocket.TextMessage, msg); err != nil {
-				break
-			}
+		msgdto, err := c.ChatUsecase.ValidateInUser(client)
+		if err != nil {
+			log.Println("invalid message format:", err)
+			return
 		}
+
+		msgBytes, err := json.Marshal(msgdto)
+		if err != nil {
+			log.Println("marshal error:", err)
+			return
+		}
+
+		conn.WriteMessage(websocket.TextMessage, msgBytes)
 	}()
 }

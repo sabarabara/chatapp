@@ -10,21 +10,24 @@ type Client struct {
 }
 
 type Hub struct {
-	Clients   map[*Client]bool
-	Broadcast chan []byte
-	Redis     ICachehub.PubSubClient
+    RoomID    string
+    Clients   map[*Client]bool
+    Broadcast chan []byte
+    Redis     ICachehub.PubSubClient
 }
 
-func NewHub(redis ICachehub.PubSubClient) *Hub {
-	h := &Hub{
-		Clients:   make(map[*Client]bool),
-		Broadcast: make(chan []byte),
-		Redis:     redis,
-	}
-	go h.run()
-	go h.listenRedis()
-	return h
+func NewHub(roomID string, redis ICachehub.PubSubClient) *Hub {
+    h := &Hub{
+        RoomID:    roomID,
+        Clients:   make(map[*Client]bool),
+        Broadcast: make(chan []byte),
+        Redis:     redis,
+    }
+    go h.run()
+    go h.listenRedis()
+    return h
 }
+
 
 func (h *Hub) run() {
 	for msg := range h.Broadcast {

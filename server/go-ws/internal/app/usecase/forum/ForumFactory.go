@@ -11,6 +11,21 @@ func NewForumFactory() *ForumFactory {
 	return &ForumFactory{}
 }
 
+func (f *ForumFactory) fetchForumInformation(dto *forum.ForumInformDTO) (*forum.ForumInformDTO, error) {
+	roomid := dto.GetRoomID()
+	username := dto.GetUsername()
+	image := dto.GetImage()
+	title := dto.GetTitle()
+
+	validroomid := vo.NewRoomId(roomid)
+	validusername := vo.NewUsername(username)
+	validimage := vo.NewImage(image)
+	validtitle := vo.NewTitle(title)
+
+	validforumdto := forum.NewForumInformDTO(validroomid.GetId(), validusername.GetUsername(), validtitle.GetTitle(), []byte(validimage.GetBase64()))
+	return validforumdto, nil
+}
+
 func (f *ForumFactory) ValidatedInForumUser(dto *forum.MessageInDTO) (*forum.MessageInDTO, error) {
 
 	messageid := dto.GetMessageID()

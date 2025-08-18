@@ -11,6 +11,20 @@ func NewChatFactory() *ChatFactory {
 	return &ChatFactory{}
 }
 
+func (f *ChatFactory) fetchChatInformation(dto *chat.ChatInformDTO) (*chat.ChatInformDTO, error) {
+
+	roomid := dto.GetRoomID()
+	username := dto.GetUsername()
+	image := dto.GetImage()
+
+	validroomid := vo.NewRoomId(roomid)
+	validusername := vo.NewUsername(username)
+	validimage := vo.NewImage(image)
+
+	validchatdto := chat.NewChatInformDTO(validroomid.GetId(), validusername.GetUsername(), []byte(validimage.GetBase64()))
+	return validchatdto, nil
+}
+
 func (f *ChatFactory) ValidatedInUser(dto *chat.MessageInDTO) (*chat.MessageInDTO, error) {
 
 	messageid := dto.GetMessageID()
