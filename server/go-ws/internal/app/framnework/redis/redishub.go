@@ -23,25 +23,25 @@ func NewHub(roomID string, redis ICachehub.PubSubClient) *Hub {
         Broadcast: make(chan []byte),
         Redis:     redis,
     }
-    go h.run()
-    go h.listenRedis()
+    go h.run(roomID)
+    go h.listenRedis(roomID)
     return h
 }
 
 
-func (h *Hub) run() {
+func (h *Hub) run(roomID string) {
 	for msg := range h.Broadcast {
 		// ローカルクライアントに送信
 		for client := range h.Clients {
 			client.Send <- msg
 		}
 		// Redis にも送信
-		h.Redis.Publish("chat-room-1", msg)
+		h.Redis.Publish(roomID, msg)
 	}
 }
 
-func (h *Hub) listenRedis() {
-	ch := h.Redis.Subscribe("chat-room-1")
+func (h *Hub) listenRedis(roomID string) {
+	ch := h.Redis.Subscribe(roomID)
 	for msg := range ch {
 		for client := range h.Clients {
 			client.Send <- msg

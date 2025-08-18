@@ -36,7 +36,7 @@ func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO, roomHub *hub.Hub) 
 		return "", err
 	}
 
-	uc.api.SendMessage(validatedDTO)
+	//uc.api.SendMessage(validatedDTO)
 
 	//dbに接続,入れ込みOKならbroadcast これどっちの方がいいのかな？早い方がいいのか？
 	msgBytes, err := json.Marshal(validatedDTO)
@@ -49,16 +49,16 @@ func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO, roomHub *hub.Hub) 
 	return "OK", nil
 }
 
-func (uc *ForumUsecase) ValidateInUser(client *hub.Client) (*forum.MessageInDTO, error) {
+func (uc *ForumUsecase) ValidateInUser(client *hub.Client) (*forum.MessageOutDTO, error) {
 
 	for msg := range client.Send {
-		dto := &forum.MessageInDTO{}
+		dto := &forum.MessageOutDTO{}
 		if err := json.Unmarshal(msg, dto); err != nil {
 			log.Println("unmarshal error:", err)
 			return nil, err
 		}
 
-		validatedDTO, err := uc.factory.ValidatedInForumUser(dto)
+		validatedDTO, err := uc.factory.ValidatedOutForumUser(dto)
 		if err != nil {
 			return nil, err
 		}

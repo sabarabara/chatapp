@@ -38,10 +38,10 @@ func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO, roomHub *hub.Hub) (s
 		return "", err
 	}
 
-	uc.api.SendMessage(validatedDTO)
+	//uc.api.SendMessage(validatedDTO)
 
 	//dbに接続,入れ込みOKならbroadcast これどっちの方がいいのかな？早い方がいいのか？
-	msgBytes, err := json.Marshal(dto)
+	msgBytes, err := json.Marshal(validatedDTO)
 	if err != nil {
 		log.Println("marshal error:", err)
 		return "", err
@@ -53,15 +53,15 @@ func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO, roomHub *hub.Hub) (s
 
 
 
-func (uc *ChatUsecase) ValidateInUser(client *hub.Client) (*chat.MessageInDTO, error) {
+func (uc *ChatUsecase) ValidateInUser(client *hub.Client) (*chat.MessageOutDTO, error) {
 	for msg := range client.Send {
-		dto := &chat.MessageInDTO{}
+		dto := &chat.MessageOutDTO{}
 		if err := json.Unmarshal(msg, dto); err != nil {
 			log.Println("unmarshal error:", err)
 			return nil, err
 		}
-
-		validatedDTO, err := uc.factory.ValidatedInUser(dto)
+		
+		validatedDTO, err := uc.factory.ValidatedOutUser(dto)
 		if err != nil {
 			return nil, err
 		}
