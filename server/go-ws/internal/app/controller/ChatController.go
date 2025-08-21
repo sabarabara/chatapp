@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
+	"net/http"
 	"go-ws/internal/app/controller/ws"
 	dto "go-ws/internal/app/core/dto/chat"
 	hub "go-ws/internal/app/framnework/redis"
 	"go-ws/internal/app/usecase/chat"
 	"log"
+	"go-ws/internal/app/usecase/session"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -15,18 +17,38 @@ import (
 type ChatController struct {
 	ChatUsecase *chat.ChatUsecase
 	HubManager  *hub.HubManager
+	SessionUsecase *session.SessionUsecase
 }
 
-func NewChatController(cu *chat.ChatUsecase, hm *hub.HubManager) *ChatController {
-	return &ChatController{ChatUsecase: cu, HubManager: hm}
+func NewChatController(cu *chat.ChatUsecase, hm *hub.HubManager, su *session.SessionUsecase) *ChatController {
+	return &ChatController{ChatUsecase: cu, HubManager: hm, SessionUsecase: su}
 }
 
 func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
+
+	//sessionの取得
+	context := ctx.Request.Context()
+	cookie, err := ctx.Request.Cookie("session_id")
+	if err != nil {
+		ctx.String(http.StatusUnauthorized, "no session")
+		return
+	}
+
+	sessionDTO, err := c.SessionUsecase.GetSession(context, cookie.Value)
+	if err != nil {
+		ctx.String(http.StatusUnauthorized, "invalid session")
+		return
+	}
+
+	
+
+	// upgrade
 	conn, err := ws.Upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
 		log.Println("upgrade error:", err)
 		return
 	}
+
 
 	// Client を作成（Send channel は必須）
 	client := &hub.Client{Send: make(chan []byte, 256)}
