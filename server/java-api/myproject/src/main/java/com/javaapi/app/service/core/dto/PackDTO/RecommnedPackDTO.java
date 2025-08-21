@@ -15,6 +15,7 @@ public class RecommnedPackDTO{
   public String getUsername() {
     return username;
   }
+  
   public String getCharactertype() {
     return charactertype;
   }
