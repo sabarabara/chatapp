@@ -6,6 +6,7 @@ import (
 	"go-ws/internal/app/framnework/api"
 	hub "go-ws/internal/app/framnework/redis"
 	"log"
+	"go-ws/internal/app/core/dto/session"
 )
 
 type ForumUsecase struct {
@@ -30,13 +31,15 @@ func (uc *ForumUsecase) FetchForumInformation(dto *forum.ForumInformDTO) (string
 }
 
 // //////////////////////////////////////////////////////////////////////////////////
-func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO, roomHub *hub.Hub) (string, error) {
-	validatedDTO, err := uc.factory.ValidatedOutForumUser(dto)
+func (uc *ForumUsecase) SendMessage(sessiondto *session.SessionDTO, dto *forum.MessageOutNonidDTO, roomHub *hub.Hub) (string, error) {
+
+	//uc.api.SendMessage(validatedDTO)
+	messageid := "karioki"
+
+	validatedDTO, err := uc.factory.ValidatedOutForumUser(dto,messageid)
 	if err != nil {
 		return "", err
 	}
-
-	//uc.api.SendMessage(validatedDTO)
 
 	//dbに接続,入れ込みOKならbroadcast これどっちの方がいいのかな？早い方がいいのか？
 	msgBytes, err := json.Marshal(validatedDTO)
@@ -49,7 +52,7 @@ func (uc *ForumUsecase) SendMessage(dto *forum.MessageOutDTO, roomHub *hub.Hub) 
 	return "OK", nil
 }
 
-func (uc *ForumUsecase) ValidateInUser(client *hub.Client) (*forum.MessageOutDTO, error) {
+func (uc *ForumUsecase) ValidateInUser(sessiondto *session.SessionDTO, client *hub.Client) (*forum.MessageInDTO, error) {
 
 	for msg := range client.Send {
 		dto := &forum.MessageOutDTO{}
@@ -58,7 +61,19 @@ func (uc *ForumUsecase) ValidateInUser(client *hub.Client) (*forum.MessageOutDTO
 			return nil, err
 		}
 
-		validatedDTO, err := uc.factory.ValidatedOutForumUser(dto)
+
+		// session内の情報をdtoに追加
+		userid := sessiondto.UserID
+		username := sessiondto.Username
+		isPersonal := true
+
+		if userid != dto.GetUserID() {
+			isPersonal = false
+		}
+
+		setInDTO := forum.NewMessageInDTO(dto.GetMessageID(), dto.GetMessage(), userid, isPersonal, username)
+
+		validatedDTO, err := uc.factory.ValidatedInForumUser(setInDTO)
 		if err != nil {
 			return nil, err
 		}

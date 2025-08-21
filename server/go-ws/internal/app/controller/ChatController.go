@@ -68,7 +68,7 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 				break
 			}
 
-			var msgDTO dto.MessageOutDTO
+			var msgDTO dto.MessageOutNonidDTO
 			if err := json.Unmarshal(msgBytes, &msgDTO); err != nil {
 				log.Println("invalid message format:", err)
 				continue
@@ -83,7 +83,7 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 			}
 
 			// Usecase に渡す
-			_, err = c.ChatUsecase.SendMessage(&msgDTO, roomHub)
+			_, err = c.ChatUsecase.SendMessage(&sessionDTO,&msgDTO, roomHub)
 			if err != nil {
 				log.Println("send message error:", err)
 			}
@@ -95,7 +95,7 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 		defer conn.Close()
 		for {
 			// ここは client に送られる Hub メッセージを待つ
-			msgDTO, err := c.ChatUsecase.ValidateInUser(client)
+			msgDTO, err := c.ChatUsecase.ValidateInUser(&sessionDTO, client)
 			if err != nil {
 				log.Println("invalid message format:", err)
 				break

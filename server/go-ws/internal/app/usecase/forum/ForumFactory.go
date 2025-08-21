@@ -44,7 +44,7 @@ func (f *ForumFactory) ValidatedInForumUser(dto *forum.MessageInDTO) (*forum.Mes
 	return validmegdto, nil
 }
 
-func (f *ForumFactory) ValidatedOutForumUser(dto *forum.MessageOutDTO) (*forum.MessageOutDTO, error) {
+func (f *ForumFactory) ValidatedOutForumUser(dto *forum.MessageOutNonidDTO,messageId string) (*forum.MessageOutDTO, error) {
 	roomid := dto.GetRoomID()
 	message := dto.GetMessage()
 	userid := dto.GetUserID()
@@ -53,6 +53,6 @@ func (f *ForumFactory) ValidatedOutForumUser(dto *forum.MessageOutDTO) (*forum.M
 	validmessage := vo.NewMessage(message)
 	validuserid := vo.NewUserId(userid)
 
-	validmegdto := forum.NewMessageOutDTO(validroomid.GetId(), validuserid.GetId(), validmessage.GetContent())
+	validmegdto := forum.NewMessageOutDTO(validroomid.GetId(), validuserid.GetId(), validmessage.GetContent(), messageId)
 	return validmegdto, nil
 }

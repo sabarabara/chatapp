@@ -61,7 +61,7 @@ func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
 				break
 			}
 
-			var msgDTO dto.MessageOutDTO
+			var msgDTO dto.MessageOutNonidDTO
 			if err := json.Unmarshal(msgBytes, &msgDTO); err != nil {
 				log.Println("invalid message format:", err)
 				continue
@@ -76,7 +76,7 @@ func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
 			}
 
 			// Usecaseに渡す
-			_, err = f.ForumUsecase.SendMessage(&msgDTO, roomHub)
+			_, err = f.ForumUsecase.SendMessage(&sessionDTO, &msgDTO, roomHub)
 			if err != nil {
 				log.Println("send message error:", err)
 			}
@@ -86,7 +86,7 @@ func (f *ForumController) HandleWebSocket(ctx *gin.Context) {
 	// hub->client
 	go func() {
 		defer conn.Close()
-		msgdto, err := f.ForumUsecase.ValidateInUser(client)
+		msgdto, err := f.ForumUsecase.ValidateInUser(&sessionDTO, client)
 		if err != nil {
 			log.Println("invalid message format:", err)
 			return

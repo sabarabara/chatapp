@@ -5,16 +5,18 @@ import "encoding/json"
 import "log"
 
 type MessageOutDTO struct {
-	roomid  uuid.UUID
-	message string
-	userid  string
+	roomid    uuid.UUID
+	messageid string
+	message   string
+	userid    string
 }
 
-func NewMessageOutDTO(roomid uuid.UUID, message string, userid string) *MessageOutDTO {
+func NewMessageOutDTO(roomid uuid.UUID, messageid string, message string, userid string) *MessageOutDTO {
 	return &MessageOutDTO{
-		roomid:  roomid,
-		message: message,
-		userid:  userid,
+		roomid:    roomid,
+		messageid: messageid,
+		message:   message,
+		userid:    userid,
 	}
 }
 
@@ -29,22 +31,28 @@ func (dto *MessageOutDTO) GetUserID() string {
 	return dto.userid
 }
 
+func (dto *MessageOutDTO) GetMessageID() string {
+	return dto.messageid
+}
+
 func (m MessageOutDTO) MarshalJSON() ([]byte, error) {
 
 
     return json.Marshal(map[string]interface{}{
-        "message": m.message,
-        "userId":  m.userid,
-		"roomId":  m.roomid.String(),
+        "messageId": m.messageid,
+        "message":   m.message,
+        "userId":    m.userid,
+		"roomId":    m.roomid.String(),
     })
 }
 
 func (m *MessageOutDTO) UnmarshalJSON(data []byte) error {
 
     var tmp struct {
-        Message string `json:"message"`
-        UserID  string `json:"userId"`
-		RoomID  string `json:"roomId"`
+        MessageID string `json:"messageId"`
+        Message   string `json:"message"`
+        UserID    string `json:"userId"`
+		RoomID    string `json:"roomId"`
     }
 
 	log.Println("Raw JSON:", string(data))

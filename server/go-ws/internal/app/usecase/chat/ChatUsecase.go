@@ -6,6 +6,7 @@ import (
 	"go-ws/internal/app/core/dto/chat"
 	"go-ws/internal/app/framnework/api"
 	"go-ws/internal/app/framnework/redis"
+	"go-ws/internal/app/core/dto/session"
 )
 
 type ChatUsecase struct {
@@ -32,20 +33,24 @@ func (uc *ChatUsecase) FetchChatInformation(dto *chat.ChatInformDTO) (string, er
 
 /////////////////////////////////////////////////////////////////////////////////
 
-func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO, roomHub *hub.Hub) (string, error) {
-	validatedDTO, err := uc.factory.ValidatedOutUser(dto)
+func (uc *ChatUsecase) SendMessage(sessiondto *session.SessionDTO, dto *chat.MessageOutNonidDTO, roomHub *hub.Hub) (string, error) {
+
+	//ここでmessageidをjavaapiから受け取る
+	//uc.api.SendMessage(validatedDTO)
+	messageid := "karioki"
+
+	validatedDTO, err := uc.factory.ValidatedOutUser(dto,messageid)
 	if err != nil {
 		return "", err
 	}
-
-	//uc.api.SendMessage(validatedDTO)
-
 	//dbに接続,入れ込みOKならbroadcast これどっちの方がいいのかな？早い方がいいのか？
 	msgBytes, err := json.Marshal(validatedDTO)
 	if err != nil {
 		log.Println("marshal error:", err)
 		return "", err
 	}
+
+	
 	roomHub.Broadcast <- msgBytes
 
 	return "OK", nil
@@ -53,15 +58,27 @@ func (uc *ChatUsecase) SendMessage(dto *chat.MessageOutDTO, roomHub *hub.Hub) (s
 
 
 
-func (uc *ChatUsecase) ValidateInUser(client *hub.Client) (*chat.MessageOutDTO, error) {
+func (uc *ChatUsecase) ValidateInUser(sessiondto *session.SessionDTO, client *hub.Client) (*chat.MessageInDTO, error) {
 	for msg := range client.Send {
 		dto := &chat.MessageOutDTO{}
 		if err := json.Unmarshal(msg, dto); err != nil {
 			log.Println("unmarshal error:", err)
 			return nil, err
 		}
-		
-		validatedDTO, err := uc.factory.ValidatedOutUser(dto)
+
+		// session内の情報をdtoに追加
+		userid := sessiondto.UserID
+		username := sessiondto.Username
+		isPersonal := true
+
+		if userid != dto.GetUserID() {
+			isPersonal = false
+		}
+
+		setInDTO := chat.NewMessageInDTO(dto.GetMessageID(), dto.GetMessage(), userid, isPersonal, username)
+
+
+		validatedDTO, err := uc.factory.ValidatedInUser(setInDTO)
 		if err != nil {
 			return nil, err
 		}

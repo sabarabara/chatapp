@@ -1,12 +1,16 @@
 package forum
 
+import (
+	"encoding/json"
+)
+
 
 type MessageInDTO struct {
-	messageid string `json:"messageId"`
-	message   string `json:"message"`
-	userid    string `json:"userId"`
-	isPersonal bool   `json:"isPersonal"`
-	username  string `json:"username"`
+	messageid string
+	message   string
+	userid    string
+	isPersonal bool
+	username  string
 }
 
 func NewMessageInDTO(messageid, message, userid string, isPersonal bool, username string) *MessageInDTO {
@@ -33,4 +37,36 @@ func (dto *MessageInDTO) IsPersonal() bool {
 }
 func (dto *MessageInDTO) GetUsername() string {
 	return dto.username
+}
+
+func (m MessageInDTO) MarshalJSON() ([]byte, error) {
+	return json.Marshal(map[string]interface{}{
+		"messageId":  m.messageid,
+		"message":    m.message,
+		"userId":     m.userid,
+		"isPersonal": m.isPersonal,
+		"username":   m.username,
+	})
+}
+
+func (m *MessageInDTO) UnmarshalJSON(data []byte) error {
+	var tmp struct {
+		MessageID  string `json:"messageId"`
+		Message    string `json:"message"`
+		UserID     string `json:"userId"`
+		IsPersonal bool   `json:"isPersonal"`
+		Username   string `json:"username"`
+	}
+
+	if err := json.Unmarshal(data, &tmp); err != nil {
+		return err
+	}
+
+	m.messageid = tmp.MessageID
+	m.message = tmp.Message
+	m.userid = tmp.UserID
+	m.isPersonal = tmp.IsPersonal
+	m.username = tmp.Username
+
+	return nil
 }
