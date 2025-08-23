@@ -1,7 +1,9 @@
 package com.javaapi.app.service.core.dto.ConversationDTO;
 
+import java.util.UUID;
+
 public interface IConversationDTO {
-    String getRoomId();
-    String getUserId();
+    UUID getRoomId();
+    UUID getUserId();
     String getUsername();
 }

@@ -1,6 +1,7 @@
 package com.javaapi.app.service.core.domain.service.interacter.IDBService.query;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import com.javaapi.app.service.core.dto.ConversationDTO.IConversationDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
 import com.javaapi.app.service.core.entity.RoomMemberEntity;
 
-public interface IConversationRepo extends JpaRepository<RoomMemberEntity, String> {
+public interface IConversationRepo extends JpaRepository<RoomMemberEntity, UUID> {
 
     @Query("""
     SELECT 
@@ -31,7 +32,7 @@ public interface IConversationRepo extends JpaRepository<RoomMemberEntity, Strin
           HAVING COUNT(rm2.user.id) = 2
       )
     """)
-    List<IConversationDTO> findConnectedUsersInTwoMemberRooms(@Param("userId") Integer userId, Pageable pageable);
+    List<IConversationDTO> findConnectedUsersInTwoMemberRooms(@Param("userId") UUID userId, Pageable pageable);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Query("""
@@ -46,6 +47,6 @@ public interface IConversationRepo extends JpaRepository<RoomMemberEntity, Strin
     WHERE m.room.id = :roomId
     ORDER BY m.createdAt ASC
     """)
-    List<IConversationMemoryDTO> findMessagesByRoomId(@Param("roomId") Integer roomId);
+    List<IConversationMemoryDTO> findMessagesByRoomId(@Param("roomId") UUID roomId);
 
 }

@@ -1,6 +1,7 @@
 package com.javaapi.app.service.core.domain.service.interacter.IDBService.query;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +12,7 @@ import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.entity.RoomMemberEntity;
 
-public interface IForumRepo extends JpaRepository<RoomMemberEntity, String> {
+public interface IForumRepo extends JpaRepository<RoomMemberEntity, UUID> {
 
     @Query("""
     SELECT 
@@ -32,7 +33,7 @@ public interface IForumRepo extends JpaRepository<RoomMemberEntity, String> {
           HAVING COUNT(rm2.user.id) >= 3
       )
     """)
-    List<IForumDTO> findConnectedUsersInBulletinRooms(@Param("userId") Integer userId, Pageable pageable);
+    List<IForumDTO> findConnectedUsersInBulletinRooms(@Param("userId") UUID userId, Pageable pageable);
 
     ///////////////////////////////////////
 @Query("""
@@ -47,5 +48,5 @@ public interface IForumRepo extends JpaRepository<RoomMemberEntity, String> {
     WHERE m.room.id = :roomId
     ORDER BY m.createdAt ASC
     """)
-    List<IForumMemoryDTO> findBulletinMessagesByRoomId(@Param("roomId") Integer roomId);
+    List<IForumMemoryDTO> findBulletinMessagesByRoomId(@Param("roomId") UUID roomId);
 }

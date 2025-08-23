@@ -12,6 +12,8 @@ import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 import com.javaapi.app.service.usecase.Conversation.ConversationUsecase;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @RestController
 @RequestMapping("/conversation")
@@ -36,7 +38,7 @@ public class ConversationController {
         return conversationUsecase.createConversation(conversationInDTO);
     }
 
-    public List<ConversationOutDTO> getConversations(UUID roomid, UUID userid) {
-        return conversationUsecase.getConversations(roomid, userid);
+    public List<ConversationOutDTO> getConversations(HttpSession session ,UUID roomid) {
+        return conversationUsecase.getConversations(session, roomid);
     }
 }
