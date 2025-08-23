@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import com.javaapi.app.service.core.entity.RoomEntity;
 
-public interface IRoomRepo extends JpaRepository<RoomEntity, String> {
+public interface IRoomRepo extends JpaRepository<RoomEntity, UUID> {
 
     @Query("SELECT r FROM RoomEntity r " +
            "JOIN r.members m1 " +
