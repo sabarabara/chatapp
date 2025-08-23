@@ -17,6 +17,10 @@ func NewRedisClient(addr string) *RedisClient {
 	return &RedisClient{client: rdb}
 }
 
+func (r *RedisClient) Get(ctx context.Context, key string) *redis.StringCmd {
+	return r.client.Get(ctx, key)
+}
+
 func (r *RedisClient) Ping(ctx context.Context) (string, error) {
 	return r.client.Ping(ctx).Result()
 }
