@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
@@ -11,6 +13,7 @@ import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 
 import jakarta.servlet.http.HttpSession;
 
+@Service
 public class ConversationFactory {
     //selectConversationsの変換
     public List<SelectConvDTO> toSelectConvDTO(List<IConversationDTO> dto) {

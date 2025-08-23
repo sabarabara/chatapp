@@ -3,11 +3,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 
+@Service
 public class ForumFactory {
 
     //selectForumsの変換

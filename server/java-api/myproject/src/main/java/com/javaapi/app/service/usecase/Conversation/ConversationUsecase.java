@@ -3,6 +3,8 @@ package com.javaapi.app.service.usecase.Conversation;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IConversationRepo;
 import com.javaapi.app.service.core.dto.ConversationDTO.ConversationInDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
@@ -12,6 +14,7 @@ import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 
 import jakarta.servlet.http.HttpSession;
 
+@Service
 public class ConversationUsecase {
 
     private final IConversationRepo conversationRepo;

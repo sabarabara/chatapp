@@ -3,6 +3,8 @@ package com.javaapi.app.service.usecase.Forum;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.stereotype.Service;
+
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IForumRepo;
 import com.javaapi.app.service.core.dto.ForumDTO.ForumInDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
@@ -10,6 +12,7 @@ import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 
+@Service
 public class ForumUsecase {
 
     private final IForumRepo forumRepo;
