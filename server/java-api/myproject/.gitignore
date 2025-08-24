@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+### Mac ###
+.DS_Store 
+
+# Local configuration file (sdk path, etc)
+application.properties
