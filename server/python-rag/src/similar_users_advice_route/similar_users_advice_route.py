@@ -40,6 +40,6 @@ def get_similar_users_with_advice(user_id, top_k=3):
 
         # Geminiの返り値は response.text に格納される
         advice = response.text
-        results.append({"user_id": uid, "hobby": hobby, "advice": advice})
 
-    return {"similar_users": results}
+        return {"user_id": uid, "hobby": hobby, "advice": advice}
+
