@@ -33,8 +33,10 @@ func (uc *ForumUsecase) FetchForumInformation(dto *forum.ForumInformDTO) (string
 // //////////////////////////////////////////////////////////////////////////////////
 func (uc *ForumUsecase) SendMessage(sessiondto *session.SessionDTO, dto *forum.MessageOutNonidDTO, roomHub *hub.Hub) (string, error) {
 
-	//uc.api.SendMessage(validatedDTO)
-	messageid := "karioki"
+	messageid, err := uc.api.SendMessage(dto)
+	if err != nil {
+		return "", err
+	}
 
 	validatedDTO, err := uc.factory.ValidatedOutForumUser(dto,messageid)
 	if err != nil {

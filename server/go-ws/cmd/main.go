@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+	"os"
 
 	controllers "go-ws/internal/app/controller"
 
@@ -20,31 +21,36 @@ import (
 )
 
 func main() {
-	// Redis クライアント作成
-	rdb := redispkg.NewRedisClient("localhost:6379")
 
-	// Redis 接続確認
 	ctx := context.Background()
-	if _, err := rdb.Ping(ctx); err != nil {
-		log.Fatalf("Failed to connect to Redis: %v", err)
-	} else {
+
+    // Redis
+    redisHost := os.Getenv("REDIS_HOST")
+    if redisHost == "" {
+        redisHost = "redis"
+    }
+    rdb := redispkg.NewRedisClient(redisHost + ":6379")
+    if _, err := rdb.Ping(ctx); err != nil {
+        log.Fatalf("Failed to connect to Redis: %v", err)
+    } else {
 		log.Println("Connected to Redis successfully")
 	}
 
+    // HTTP クライアント
+    httpClient := &http.Client{Timeout: 10 * time.Second}
 
-	//httpclient初期化
-	httpClient := &http.Client{
-		Timeout: time.Second * 10,
-	}
+    // Java API ホスト
+    javaAPIHost := os.Getenv("JAVA_API_HOST")
+    if javaAPIHost == "" {
+        javaAPIHost = "java-api:8080"
+    }
 
-	const port = "8080"
+    // Hub 初期化
+    h := hub.NewHubManager(rdb)
 
-	// Hub 初期化
-	h := hub.NewHubManager(rdb)
-
-	// APIサーバー初期化
-	chatAPI := api.NewChatAPIserver(httpClient, "http://localhost:"+port)
-	forumAPI := api.NewForumAPIServer(httpClient, "http://localhost:"+port)
+    // APIサーバー初期化
+    chatAPI := api.NewChatAPIserver(httpClient, "http://"+javaAPIHost)
+    forumAPI := api.NewForumAPIServer(httpClient, "http://"+javaAPIHost)
 
 	//usecase初期化
 	//chat
@@ -59,7 +65,6 @@ func main() {
 	sessionStore := sessionstore.NewSessionStore(rdb)
 	sessionUsecase := session.NewSessionUsecase(sessionStore)
 
-
 	// Controller 初期化
 	Chatctrl := controllers.NewChatController(chatUsecase, h, sessionUsecase)
 	Forumctrl := controllers.NewForumController(forumUsecase, h, sessionUsecase)
@@ -68,5 +73,5 @@ func main() {
 	r := gin.Default()
 	r.GET("/chat/ws", Chatctrl.HandleWebSocket)
 	r.GET("/forum/ws", Forumctrl.HandleWebSocket)
-	r.Run(":8080")
+	r.Run(":8083")
 }

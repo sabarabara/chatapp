@@ -41,8 +41,8 @@ func (s *ChatAPIserver) FetchChatInformation(dto *chat.ChatInformDTO) (string, e
 	return "OK", nil
 }
 
-func (s *ChatAPIserver) SendMessage(dto *chat.MessageOutDTO) (string, error) {
-	url := s.baseURL + "/chat/message/send"
+func (s *ChatAPIserver) SendMessage(dto *chat.MessageOutNonidDTO) (string, error) {
+	url := s.baseURL + "/conversation/create"
 
 	body, err := json.Marshal(dto)
 	if err != nil {
@@ -59,7 +59,12 @@ func (s *ChatAPIserver) SendMessage(dto *chat.MessageOutDTO) (string, error) {
 		return "", fmt.Errorf("failed: %s", resp.Status)
 	}
 
-	return "OK", nil
+	var uuidStr string
+	if err := json.NewDecoder(resp.Body).Decode(&uuidStr); err != nil {
+		return "", err
+	}
+
+	return uuidStr, nil
 }
 
 func (s *ChatAPIserver) ReceiveMessage(dto *chat.MessageInDTO) (string, error) {
@@ -80,5 +85,10 @@ func (s *ChatAPIserver) ReceiveMessage(dto *chat.MessageInDTO) (string, error) {
 		return "", fmt.Errorf("failed: %s", resp.Status)
 	}
 
-	return "OK", nil
+	var uuidStr string
+	if err := json.NewDecoder(resp.Body).Decode(&uuidStr); err != nil {
+		return "", err
+	}
+
+	return uuidStr, nil
 }

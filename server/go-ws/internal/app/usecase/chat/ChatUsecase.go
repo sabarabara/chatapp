@@ -36,8 +36,10 @@ func (uc *ChatUsecase) FetchChatInformation(dto *chat.ChatInformDTO) (string, er
 func (uc *ChatUsecase) SendMessage(sessiondto *session.SessionDTO, dto *chat.MessageOutNonidDTO, roomHub *hub.Hub) (string, error) {
 
 	//ここでmessageidをjavaapiから受け取る
-	//uc.api.SendMessage(validatedDTO)
-	messageid := "karioki"
+	messageid, err := uc.api.SendMessage(dto)
+	if err != nil {
+		return "", err
+	}
 
 	validatedDTO, err := uc.factory.ValidatedOutUser(dto,messageid)
 	if err != nil {

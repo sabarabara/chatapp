@@ -22,7 +22,7 @@ func NewForumAPIServer(client *http.Client, baseURL string) *ForumAPIServer {
 }
 
 func (s *ForumAPIServer) FetchForumInformation(dto *forum.ForumInformDTO) (string, error) {
-	url := s.baseURL + "/forum/info"
+	url := s.baseURL + "/forum/information"
 
 	body, err := json.Marshal(dto)
 	if err != nil {
@@ -42,8 +42,8 @@ func (s *ForumAPIServer) FetchForumInformation(dto *forum.ForumInformDTO) (strin
 	return "OK", nil
 }
 
-func (s *ForumAPIServer) SendMessage(dto *forum.MessageOutDTO) (string, error) {
-	url := s.baseURL + "/forum/message/send"
+func (s *ForumAPIServer) SendMessage(dto *forum.MessageOutNonidDTO) (string, error) {
+	url := s.baseURL + "/forum/create"
 
 	body, err := json.Marshal(dto)
 	if err != nil {
@@ -60,7 +60,11 @@ func (s *ForumAPIServer) SendMessage(dto *forum.MessageOutDTO) (string, error) {
 		return "", fmt.Errorf("failed: %s", resp.Status)
 	}
 
-	return "OK", nil
+	var uuidStr string
+	if err := json.NewDecoder(resp.Body).Decode(&uuidStr); err != nil {
+		return "", err
+	}
+	return uuidStr, nil
 }
 
 func (s *ForumAPIServer) ReceiveMessage(dto *forum.MessageInDTO) (string, error) {

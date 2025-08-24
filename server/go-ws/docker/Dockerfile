@@ -8,4 +8,6 @@ RUN go mod download
 COPY . .
 RUN go build -o ws-server ./cmd
 
+EXPOSE 8080
+
 CMD ["./ws-server"]
