@@ -1,20 +1,113 @@
+version: "3.9"
+
 services:
+  traefik:
+    image: traefik:v3.0
+    command:
+      - "--api.insecure=true"        # ダッシュボード有効化（本番では外部公開しないこと）
+      - "--providers.docker=true"       # Dockerラベルから自動設定
+      - "--providers.docker.network=app-net" # Traefikが接続するネットワーク
+      - "--providers.docker.exposedByDefault=false" # 明示的に有効化されたサービスのみを公開
+      - "--entrypoints.web.address=:80" # HTTPエントリーポイント
+    ports:
+      - "80:80"     # HTTPトラフィック
+      - "8082:8080"   # Traefikダッシュボード
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - app-net
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres-rag:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: rag_user
+      POSTGRES_PASSWORD: rag_pass
+      POSTGRES_DB: rag_db
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rag_user -d rag_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  postgres-java:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: java_user
+      POSTGRES_PASSWORD: java_pass
+      POSTGRES_DB: java_db
+    networks:
+      - app-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U java_user -d java_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
   go-ws:
     build:
       context: ./go-ws
       dockerfile: docker/Dockerfile
-    ports:
-      - "8080:8080"
     networks:
       - app-net
-
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres-rag:
+        condition: service_healthy
+      postgres-java:
+        condition: service_healthy
+    environment:
+      - REDIS_HOST=redis
+      - JAVA_API_HOST=java-api
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.go-ws.rule=Host(`localhost`) && PathPrefix(`/go`)"
+      - "traefik.http.services.go-ws.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.go-ws-stripprefix.stripprefix.prefixes=/go"
+      - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix"
 
   java-api:
     build: ./java-api/myproject
-    ports:
-      - "8081:8080"
     networks:
       - app-net
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres-java:
+        condition: service_healthy
+      postgres-rag:
+        condition: service_healthy
+    environment:
+      - CPP_WORKER_HOST=cpp-worker:8080
+      - PYTHON_RAG_HOST=python-rag:5000
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+
+      #ここは後で直す
+      #- POSTGRES_URL=jdbc:postgresql://postgres-java:5432/java_db
+      #- POSTGRES_USER=java_user
+      #- POSTGRES_PASSWORD=java_pass
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.java-api.rule=Host(`localhost`) && PathPrefix(`/java`)"
+      - "traefik.http.services.java-api.loadbalancer.server.port=8080"
+      - "traefik.http.middlewares.java-api-stripprefix.stripprefix.prefixes=/java"
+      - "traefik.http.routers.java-api.middlewares=java-api-stripprefix"
 
 
   cpp-worker:
@@ -25,15 +118,28 @@ services:
       - app-net
     stdin_open: true
     tty: true
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres-rag:
+        condition: service_healthy
+      postgres-java:
+        condition: service_healthy
+      
 
   python-rag:
     build:
       context: ./python-rag
       dockerfile: Dockerfile
-    ports:
-      - "8082:5000"
     networks:
       - app-net
+    depends_on:
+      redis:
+        condition: service_healthy
+      postgres-rag:
+        condition: service_healthy
+      postgres-java:
+        condition: service_healthy
 
 networks:
   app-net:
