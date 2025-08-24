@@ -1,0 +1,6 @@
+source env/bin/activate.fish
+pip install -r requirements.txt
+pip freeze > requirements.txt
+deactivat
+
+Python app.py

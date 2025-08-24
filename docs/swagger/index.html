@@ -1,0 +1,21 @@
+<!-- swagger/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <link rel="stylesheet" href="swagger-ui.css">
+</head>
+<body>
+  <div id="swagger-ui"></div>
+  <script src="swagger-ui-bundle.js"></script>
+  <script>
+    window.onload = () => {
+      SwaggerUIBundle({
+        url: "swagger.yaml", // 相対パス or 外部URLも可
+        dom_id: '#swagger-ui'
+      });
+    };
+  </script>
+</body>
+</html>

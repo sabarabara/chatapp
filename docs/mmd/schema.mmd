@@ -1,0 +1,105 @@
+erDiagram
+  USERS {
+    INT id PK
+    VARCHAR username
+    VARCHAR email
+    TIMESTAMP created_at
+    TIMESTAMP last_login_at
+    TEXT avatar_url
+  }
+
+  USER_PROFILES {
+    INT user_id
+    VARCHAR blood_type
+    INT height
+    DATE birthday
+    VARCHAR favorite_weather
+    VARCHAR favorite_color
+    VARCHAR dominant_hand
+    VARCHAR character_type
+    TIMESTAMP updated_at
+  }
+
+  ROOMS {
+    INT id PK
+    VARCHAR type
+    VARCHAR title
+    TIMESTAMP created_at
+    TIMESTAMP updated_at
+    BOOLEAN deleted
+    INT views
+    BOOLEAN pinned
+  }
+
+  ROOM_MEMBERS {
+    INT id PK
+    INT room_id
+    INT user_id
+  }
+
+  MESSAGES {
+    INT id PK
+    INT room_id
+    INT sender_id
+    TEXT content
+    TIMESTAMP created_at
+    TIMESTAMP updated_at
+    BOOLEAN deleted
+    INT parent_message_id
+  }
+
+  READ_STATUS {
+    INT room_id
+    INT user_id
+    INT last_read_message_id
+    TIMESTAMP updated_at
+  }
+
+  POST_LIKES {
+    INT id PK
+    INT room_id
+    INT user_id
+    TIMESTAMP created_at
+  }
+
+  COMMENT_LIKES {
+    INT id PK
+    INT message_id
+    INT user_id
+    TIMESTAMP created_at
+  }
+
+  TAGS {
+    INT id PK
+    VARCHAR name
+  }
+
+  ROOM_TAGS {
+    INT room_id
+    INT tag_id
+  }
+
+  ATTACHMENTS {
+    INT id PK
+    INT message_id
+    TEXT file_url
+    VARCHAR file_type
+    INT file_size
+    TIMESTAMP uploaded_at
+  }
+
+  USERS ||--|| USER_PROFILES : has_profile
+  USERS ||--o{ ROOM_MEMBERS : participates
+  ROOMS ||--o{ ROOM_MEMBERS : has_members
+  ROOMS ||--o{ MESSAGES : has_messages
+  USERS ||--o{ MESSAGES : sends
+  USERS ||--o{ READ_STATUS : reads
+  ROOMS ||--o{ READ_STATUS : read_status
+  USERS ||--o{ POST_LIKES : likes_post
+  ROOMS ||--o{ POST_LIKES : post_likes
+  USERS ||--o{ COMMENT_LIKES : likes_comment
+  MESSAGES ||--o{ COMMENT_LIKES : comment_likes
+  TAGS ||--o{ ROOM_TAGS : tagged
+  ROOMS ||--o{ ROOM_TAGS : tags
+  MESSAGES ||--o{ ATTACHMENTS : attachments
+
