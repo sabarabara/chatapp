@@ -15,24 +15,23 @@ import com.javaapi.app.service.core.entity.RoomMemberEntity;
 public interface IForumRepo extends JpaRepository<RoomMemberEntity, UUID> {
 
     @Query("""
-    SELECT 
-        r2.room.id AS roomId,
-        u.id AS userId,
-        u.username AS username,
-        r2.room.title AS title
-    FROM RoomMemberEntity r1
-    JOIN r1.room rm
-    JOIN rm.members r2
-    JOIN r2.user u
-    WHERE r1.user.id = :userId
-      AND r2.user.id <> :userId
-      AND rm.id IN (
-          SELECT rm2.id
-          FROM RoomMemberEntity rm2
-          GROUP BY rm2.room.id
-          HAVING COUNT(rm2.user.id) >= 3
-      )
-    """)
+SELECT r2.room.id AS roomId,
+       u.id AS userId,
+       u.username AS username,
+       r2.room.title AS title
+FROM RoomMemberEntity r1
+JOIN r1.room rm
+JOIN rm.members r2
+JOIN r2.user u
+WHERE r1.user.id = :userId
+  AND r2.user.id <> :userId
+  AND rm.id IN (
+      SELECT rm2.room.id
+      FROM RoomMemberEntity rm2
+      GROUP BY rm2.room.id
+      HAVING COUNT(rm2.user.id) >= 3
+  )
+""")
     List<IForumDTO> findConnectedUsersInBulletinRooms(@Param("userId") UUID userId, Pageable pageable);
 
     ///////////////////////////////////////
