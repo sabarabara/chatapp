@@ -16,8 +16,13 @@ public class RecommendPackResult {
     private final WebClient webClient;
 
     public RecommendPackResult() {
+        String pythonHost = System.getenv("PYTHON_RAG_HOST");
+        if (pythonHost == null || pythonHost.isEmpty()) {
+            pythonHost = "python-rag:6000"; // Docker Compose 内デフォルト
+        }
+
         this.webClient = WebClient.builder()
-            .baseUrl("http://172.31.192.48:6000")
+            .baseUrl("http://" + pythonHost)
             .build();
     }
 

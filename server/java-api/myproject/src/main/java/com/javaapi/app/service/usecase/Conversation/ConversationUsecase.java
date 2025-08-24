@@ -11,6 +11,8 @@ import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
+import com.javaapi.app.user.core.dto.SessionDTO;
+import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -19,15 +21,21 @@ public class ConversationUsecase {
 
     private final IConversationRepo conversationRepo;
     private final ConversationFactory conversationFactory;
+    private final SessionUsecase sessionUsecase;
+    private final ConversationService conversationService;
 
-    public ConversationUsecase(IConversationRepo conversationRepo, ConversationFactory conversationFactory) {
+    public ConversationUsecase(IConversationRepo conversationRepo, ConversationFactory conversationFactory, SessionUsecase sessionUsecase, ConversationService conversationService) {
         this.conversationRepo = conversationRepo;
         this.conversationFactory = conversationFactory;
+        this.sessionUsecase = sessionUsecase;
+        this.conversationService = conversationService;
     }
 
 
 
-    public List<SelectConvDTO> selectConversations(UUID userid, String username) {
+    public List<SelectConvDTO> selectConversations(HttpSession session) {
+        SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
+        UUID userid = sessionDTO.getUserId();
 
         List<IConversationDTO> conversationDTO = conversationRepo.findConnectedUsersInTwoMemberRooms(userid, null);
         //ここからfactoryで変換
@@ -38,7 +46,7 @@ public class ConversationUsecase {
 
     ///////    //one to one page
     public UUID createConversation(ConversationInDTO conversationInDTO) {
-        return UUID.randomUUID();
+        return conversationService.handleConversation(conversationInDTO);
     }
 
     public List<ConversationOutDTO> getConversations(HttpSession session, UUID roomid) {

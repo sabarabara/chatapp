@@ -11,30 +11,36 @@ import com.javaapi.app.service.core.dto.ForumDTO.ForumInDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 import com.javaapi.app.service.usecase.Forum.ForumUsecase;
+
+import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/forum")
 public class ForumController{
 
     private final ForumUsecase forumUsecase;
 
+    
     public ForumController(ForumUsecase forumUsecase) {
         this.forumUsecase = forumUsecase;
     }
 
 
     //select page 
-    public List<SelectForumDTO> selectForums(UUID roomid, String username) {
-        return forumUsecase.selectForums(roomid, username);
+    @RequestMapping("/select")
+    public List<SelectForumDTO> selectForums(HttpSession session) {
+        return forumUsecase.selectForums(session);
     }
 
 
     //one to one page 
+    @RequestMapping("/create")
     public UUID createForum(@RequestBody ForumInDTO forumInDTO) {
 
         return forumUsecase.createForum(forumInDTO);
     }
 
-    public List<ForumOutDTO> getForums(UUID roomid, UUID userid) {
-        return forumUsecase.getForums(roomid, userid);
+    @RequestMapping("/get")
+    public List<ForumOutDTO> getForums(@RequestBody UUID roomid, HttpSession session) {
+        return forumUsecase.getForums(roomid, session);
     }
 }

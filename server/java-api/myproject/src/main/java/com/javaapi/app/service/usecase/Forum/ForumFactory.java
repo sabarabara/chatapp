@@ -10,6 +10,8 @@ import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class ForumFactory {
 
@@ -28,10 +30,10 @@ public class ForumFactory {
     }
 
     //getForumsの変換
-    public List<ForumOutDTO> toForumOutDTO(List<IForumMemoryDTO> dto, UUID userId) {
+    public List<ForumOutDTO> toForumOutDTO(List<IForumMemoryDTO> dto, HttpSession session) {
         List<ForumOutDTO> forumOutDTOs = new ArrayList<>();
         for (IForumMemoryDTO forum : dto) {
-            boolean isPersonal = forum.getUserId().equals(userId);
+            boolean isPersonal = forum.getUserId().equals((UUID) session.getAttribute("userid"));
 
             ForumOutDTO forumOutDTO = new ForumOutDTO(
                     forum.getMessageId(),

@@ -11,21 +11,33 @@ import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
+import com.javaapi.app.user.core.dto.SessionDTO;
+import com.javaapi.app.user.usecase.Session.SessionUsecase;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ForumUsecase {
 
     private final IForumRepo forumRepo;
     private final ForumFactory forumFactory;
+    private final SessionUsecase sessionUsecase;
+    private final ForumService forumService;
 
-    public ForumUsecase(IForumRepo forumRepo, ForumFactory forumFactory) {
+    public ForumUsecase(IForumRepo forumRepo, ForumFactory forumFactory, SessionUsecase sessionUsecase, ForumService forumService) {
         this.forumRepo = forumRepo;
         this.forumFactory = forumFactory;
+        this.sessionUsecase = sessionUsecase;
+        this.forumService = forumService;
     }
 
 
-    public List<SelectForumDTO> selectForums(UUID roomid, String username) {
-        List<IForumDTO> forumDTOs = forumRepo.findConnectedUsersInBulletinRooms(roomid, null);
+    public List<SelectForumDTO> selectForums(HttpSession session) {
+
+        SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
+        UUID userid = sessionDTO.getUserId();
+
+        List<IForumDTO> forumDTOs = forumRepo.findConnectedUsersInBulletinRooms(userid, null);
         //ここからfactoryで変換
         List<SelectForumDTO> selectForumDTOs = forumFactory.toSelectForumDTO(forumDTOs);
         return selectForumDTOs;
@@ -33,13 +45,13 @@ public class ForumUsecase {
 
 
     public UUID createForum(ForumInDTO forumInDTO) {
-        return forumInDTO.getMessageid(); // Placeholder for actual implementation
+        return forumService.handleForumPost(forumInDTO);
     }
 
-    public List<ForumOutDTO> getForums(UUID roomid, UUID userid) {
+    public List<ForumOutDTO> getForums(UUID roomid, HttpSession session) {
         List<IForumMemoryDTO> forumDTOs = forumRepo.findBulletinMessagesByRoomId(roomid);
         //ここからfactoryで変換
-        List<ForumOutDTO> forumOutDTOs = forumFactory.toForumOutDTO(forumDTOs, userid);
+        List<ForumOutDTO> forumOutDTOs = forumFactory.toForumOutDTO(forumDTOs, session);
         return forumOutDTOs;
     }
 }

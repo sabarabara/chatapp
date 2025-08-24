@@ -18,7 +18,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.postgresql:postgresql:42.6.0'
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.123.Final:osx-aarch_64' // Mac M1/M2用
-
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis追加
+    implementation 'org.springframework.session:spring-session-data-redis'    // Spring Session用
 }
 
 tasks.named('test') {

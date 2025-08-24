@@ -3,6 +3,8 @@ package com.javaapi.app.service.controller;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,19 +28,21 @@ public class ConversationController {
     }
 
 
-    //select page 
-    public List<SelectConvDTO> selectConversations(UUID roomid, String username) {
-        return List.of(new SelectConvDTO(roomid, username)); // Placeholder for actual implementation
+    //select page
+    @GetMapping("/select")
+    public List<SelectConvDTO> selectConversations(HttpSession session) {
+        return conversationUsecase.selectConversations(session);
     }
 
 
     //one to one page 
+    @PostMapping("/create")
     public UUID createConversation(@RequestBody ConversationInDTO conversationInDTO) {
-
         return conversationUsecase.createConversation(conversationInDTO);
     }
 
-    public List<ConversationOutDTO> getConversations(HttpSession session ,UUID roomid) {
+    @PostMapping("/get")
+    public List<ConversationOutDTO> getConversations(HttpSession session ,@RequestBody UUID roomid) {
         return conversationUsecase.getConversations(session, roomid);
     }
 }
