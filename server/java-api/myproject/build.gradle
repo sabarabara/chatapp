@@ -20,6 +20,21 @@ dependencies {
 	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.123.Final:osx-aarch_64' // Mac M1/M2用
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // Redis追加
     implementation 'org.springframework.session:spring-session-data-redis'    // Spring Session用
+
+	// Spring Security関連
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    
+    // JWT処理用（Cognitoで使用）
+    implementation 'org.springframework.security:spring-security-oauth2-jose'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.37.3'
+	
+    
+    // AWS SDK（Cognito用）
+    implementation platform('software.amazon.awssdk:bom:2.21.29')
+    implementation 'software.amazon.awssdk:cognitoidentityprovider'
+    implementation 'software.amazon.awssdk:cognitoidentity'
 }
 
 tasks.named('test') {
