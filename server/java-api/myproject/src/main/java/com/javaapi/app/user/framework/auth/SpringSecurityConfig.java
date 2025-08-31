@@ -14,7 +14,7 @@ public class SpringSecurityConfig {
 
     public SpringSecurityConfig(OIDCSuccessHandler oidcSuccessHandler) {
         this.oidcSuccessHandler = oidcSuccessHandler;
-    }
+        }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,7 +25,7 @@ public class SpringSecurityConfig {
             )
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oidcSuccessHandler)
-            ); // ← oauth2ResourceServer は削除
+            );
 
         return http.build();
     }

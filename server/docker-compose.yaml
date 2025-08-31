@@ -75,10 +75,11 @@ services:
       - JAVA_API_HOST=java-api
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.go-ws.rule=Host(`localhost`) && PathPrefix(`/go`)"
+      - "traefik.http.routers.go-ws.rule=Host(`localhost`) && PathPrefix(`/ws`)"
       - "traefik.http.services.go-ws.loadbalancer.server.port=8080"
-      - "traefik.http.middlewares.go-ws-stripprefix.stripprefix.prefixes=/go"
-      - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix"
+      - "traefik.http.middlewares.go-ws-stripprefix.stripprefix.prefixes=/ws"
+      - "traefik.http.middlewares.go-ws-headers.headers.customrequestheaders.X-Forwarded-Prefix=/ws"
+      - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix,go-ws-headers"
 
   java-api:
     build: ./java-api/myproject
@@ -98,16 +99,21 @@ services:
       - REDIS_PORT=6379
       - REDIS_DB=0
 
+      - JAVA=java/
+
       #ここは後で直す
       #- POSTGRES_URL=jdbc:postgresql://postgres-java:5432/java_db
       #- POSTGRES_USER=java_user
       #- POSTGRES_PASSWORD=java_pass
     labels:
       - "traefik.enable=true"
+      - "traefik.http.routers.java-api.entrypoints=web"
       - "traefik.http.routers.java-api.rule=Host(`localhost`) && PathPrefix(`/java`)"
       - "traefik.http.services.java-api.loadbalancer.server.port=8080"
       - "traefik.http.middlewares.java-api-stripprefix.stripprefix.prefixes=/java"
-      - "traefik.http.routers.java-api.middlewares=java-api-stripprefix"
+      - "traefik.http.middlewares.java-api-headers.headers.customrequestheaders.X-Forwarded-Prefix=/java"
+      - "traefik.http.routers.java-api.middlewares=java-api-stripprefix,java-api-headers"
+
 
 
   cpp-worker:

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -20,9 +19,11 @@ import jakarta.servlet.http.HttpSession;
 public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
 
     private final SessionStore sessionStore;
+    private final IDPLogoutSuccessHandler idpLogoutSuccessHandler;
 
-    public OIDCSuccessHandler(SessionStore sessionStore) {
+    public OIDCSuccessHandler(SessionStore sessionStore, IDPLogoutSuccessHandler idpLogoutSuccessHandler) {
         this.sessionStore = sessionStore;
+        this.idpLogoutSuccessHandler = idpLogoutSuccessHandler;
     }
 
     
@@ -44,10 +45,8 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
         sessionStore.setUsername(session, oidcUser.getPreferredUsername());
         sessionStore.setEmail(session, oidcUser.getEmail());
 
-        // セキュリティコンテキストをクリアしてセッションIDを変更
-        SecurityContextHolder.clearContext();
-        request.changeSessionId();
-
+        //idpのsessionを廃棄する
+        idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
 
         // 認証成功後はデフォルトのリダイレクト先へ
         response.sendRedirect("/");  
