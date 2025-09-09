@@ -62,6 +62,7 @@ func (m *MessageOutDTO) UnmarshalJSON(data []byte) error {
     }
 
 
+	m.messageid = tmp.MessageID
     m.message = tmp.Message
     m.userid = tmp.UserID
 	m.roomid, _ = uuid.Parse(tmp.RoomID)

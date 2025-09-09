@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.javaapi.app.service.core.dto.ConversationDTO.ConversationInDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
+import com.javaapi.app.service.core.dto.ConversationDTO.RoomidDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 import com.javaapi.app.service.usecase.Conversation.ConversationUsecase;
 
@@ -42,7 +43,7 @@ public class ConversationController {
     }
 
     @PostMapping("/get")
-    public List<ConversationOutDTO> getConversations(HttpSession session ,@RequestBody UUID roomid) {
-        return conversationUsecase.getConversations(session, roomid);
+    public List<ConversationOutDTO> getConversations(HttpSession session ,@RequestBody RoomidDTO roomiddDto) {
+        return conversationUsecase.getConversations(session, roomiddDto.getRoomid());
     }
 }

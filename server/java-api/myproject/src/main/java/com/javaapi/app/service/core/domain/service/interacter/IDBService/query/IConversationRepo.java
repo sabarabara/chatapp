@@ -15,18 +15,20 @@ import com.javaapi.app.service.core.entity.RoomMemberEntity;
 public interface IConversationRepo extends JpaRepository<RoomMemberEntity, String> {
 
     @Query("""
-    SELECT r2.user
+    SELECT rm.id AS roomId,
+       u.username AS username
     FROM RoomMemberEntity r1
     JOIN r1.room rm
     JOIN rm.members r2
-    WHERE r1.user.id = ?1
-        AND r2.user.id <> ?1
+    JOIN r2.user u
+    WHERE r1.user.id = :userId
+        AND r2.user.id <> :userId
         AND rm.id IN (
       SELECT rm2.room.id
       FROM RoomMemberEntity rm2
       GROUP BY rm2.room.id
       HAVING COUNT(rm2.user.id) = 2
-  ) 
+    )
     """)
     List<IConversationDTO> findConnectedUsersInTwoMemberRooms(@Param("userId") String userId, Pageable pageable);
 

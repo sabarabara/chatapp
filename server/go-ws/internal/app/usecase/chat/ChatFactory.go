@@ -43,7 +43,7 @@ func (f *ChatFactory) ValidatedInUser(dto *chat.MessageInDTO) (*chat.MessageInDT
 	return validmegdto, nil
 }
 
-func (f *ChatFactory) ValidatedOutUser(dto *chat.MessageOutNonidDTO,messageId string) (*chat.MessageOutDTO, error) {
+func (f *ChatFactory) ValidatedOutUser(dto *chat.MessageOutNonidDTO, messageId string) (*chat.MessageOutDTO, error) {
 
 	roomid := dto.GetRoomID()
 	message := dto.GetMessage()

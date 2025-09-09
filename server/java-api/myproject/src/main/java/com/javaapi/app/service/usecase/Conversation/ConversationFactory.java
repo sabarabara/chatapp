@@ -2,7 +2,6 @@ package com.javaapi.app.service.usecase.Conversation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -10,15 +9,24 @@ import com.javaapi.app.service.core.dto.ConversationDTO.ConversationOutDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
+import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
 import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ConversationFactory {
+
+    private final SessionUsecase sessionUsecase;
+
+    public ConversationFactory(SessionUsecase sessionUsecase) {
+        this.sessionUsecase = sessionUsecase;
+    }
+
     //selectConversationsの変換
     public List<SelectConvDTO> toSelectConvDTO(List<IConversationDTO> dto) {
         List<SelectConvDTO> selectConvDTOs = new ArrayList<>();
         for (IConversationDTO conversation : dto) {
+
             SelectConvDTO selectConvDTO = new SelectConvDTO(
                     conversation.getRoomId(),
                     conversation.getUsername()
@@ -32,7 +40,15 @@ public class ConversationFactory {
     public List<ConversationOutDTO> toConversationOutDTO(HttpSession session, List<IConversationMemoryDTO> dto) {
         List<ConversationOutDTO> conversationOutDTOs = new ArrayList<>();
         for (IConversationMemoryDTO conversation : dto) {
-            boolean isPersonal = conversation.getUserId().equals((UUID) session.getAttribute("userid"));
+
+            String sessionuserid = sessionUsecase.getUserSession(session).getUserId();
+            String userid = conversation.getUserId();
+
+            boolean isPersonal = true;
+
+            if (!sessionuserid.equals(userid)) {
+                isPersonal = false;
+            }
 
             ConversationOutDTO conversationOutDTO = new ConversationOutDTO(
                     conversation.getMessageId(),

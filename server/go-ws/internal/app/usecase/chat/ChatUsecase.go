@@ -3,6 +3,7 @@ package chat
 import (
 	"encoding/json"
 	"log"
+	"strings"
 	"go-ws/internal/app/core/dto/chat"
 	"go-ws/internal/app/framnework/api"
 	"go-ws/internal/app/framnework/redis"
@@ -73,9 +74,13 @@ func (uc *ChatUsecase) ValidateInUser(sessiondto *session.SessionDTO, client *hu
 		username := sessiondto.Username
 		isPersonal := true
 
-		if userid != dto.GetUserID() {
-			isPersonal = false
+		log.Println("Session UserID:", userid)
+		log.Println("DTO UserID:", dto.GetUserID())
+
+		if strings.TrimSpace(userid) != strings.TrimSpace(dto.GetUserID()) {
+    	isPersonal = false
 		}
+
 
 		setInDTO := chat.NewMessageInDTO(dto.GetMessageID(), dto.GetMessage(), userid, isPersonal, username)
 
