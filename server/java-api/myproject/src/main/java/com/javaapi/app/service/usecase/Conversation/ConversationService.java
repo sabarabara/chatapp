@@ -30,6 +30,11 @@ public class ConversationService {
 
     @Transactional
     public UUID handleConversation(ConversationInDTO dto) {
+        System.out.println("👹👹Creating conversation with DTO: " + dto.getMessage());
+        System.out.println("👹👹Room ID: " + dto.getRoomid());
+        System.out.println("👹👹User ID: " + dto.getUserid());
+
+
         RoomEntity room = roomRepository.getReferenceById(dto.getRoomid());
         UserEntity user = userRepository.getReferenceById(dto.getUserid());
 

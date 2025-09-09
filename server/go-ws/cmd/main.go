@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 	"os"
+	"fmt"
 
 	controllers "go-ws/internal/app/controller"
 
@@ -40,17 +41,16 @@ func main() {
     httpClient := &http.Client{Timeout: 10 * time.Second}
 
     // Java API ホスト
-    javaAPIHost := os.Getenv("JAVA_API_HOST")
-    if javaAPIHost == "" {
-        javaAPIHost = "java-api:8080"
-    }
+    host := os.Getenv("JAVA_API_HOST")
+    port := os.Getenv("JAVA_API_PORT")
+    url := fmt.Sprintf("http://%s:%s", host, port)
 
     // Hub 初期化
     h := hub.NewHubManager(rdb)
 
     // APIサーバー初期化
-    chatAPI := api.NewChatAPIserver(httpClient, "http://"+javaAPIHost)
-    forumAPI := api.NewForumAPIServer(httpClient, "http://"+javaAPIHost)
+    chatAPI := api.NewChatAPIserver(httpClient, url)
+    forumAPI := api.NewForumAPIServer(httpClient, url)
 
 	//usecase初期化
 	//chat
@@ -77,5 +77,5 @@ func main() {
 	r.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
-	r.Run(":8083")
+	r.Run(":8080")
 }

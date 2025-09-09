@@ -40,9 +40,9 @@ func (dto *MessageInDTO) GetUsername() string {
 
 func (m MessageInDTO) MarshalJSON() ([]byte, error) {
 	return json.Marshal(map[string]interface{}{
-		"messageId": m.messageid,
+		"messageid": m.messageid,
 		"message":   m.message,
-		"userId":    m.userid,
+		"userid":    m.userid,
 		"isPersonal": m.isPersonal,
 		"username":  m.username,
 	})
@@ -50,9 +50,9 @@ func (m MessageInDTO) MarshalJSON() ([]byte, error) {
 
 func (m *MessageInDTO) UnmarshalJSON(data []byte) error {
 	var tmp struct {
-		MessageID  string `json:"messageId"`
+		MessageID  string `json:"messageid"`
 		Message    string `json:"message"`
-		UserID     string `json:"userId"`
+		UserID     string `json:"userid"`
 		IsPersonal bool   `json:"isPersonal"`
 		Username   string `json:"username"`
 	}

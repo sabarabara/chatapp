@@ -19,12 +19,25 @@ export class UserProfile {
     faker.number.int({ min: 150, max: 180 }),
     faker.date.past({ years: 50 }),
     faker.helpers.arrayElement(['sunny', 'rainy', 'cloudy']),
-    faker.color.human(),
-    faker.helpers.arrayElement(['left', 'right']),
-    faker.helpers.arrayElement(['Introvert', 'Extrovert', 'Ambivert'])
+    faker.helpers.arrayElement(['red', 'blue', 'green', 'yellow', 'purple','white','black']),
+    faker.helpers.arrayElement(['left', 'right', 'ambidextrous']),
+    faker.helpers.arrayElement([
+    'Swordsman',
+    'Mage',
+    'Knight',
+    'Ninja',
+    'Thief',
+    'Archer',
+    'Clown',
+    'Berserker',
+    'Bard',
+    'Alchemist',
+    'Priest',
+
+  ]
+),
   ]
 );
-
     console.log('✅ UserProfiles seeded');
   }
 

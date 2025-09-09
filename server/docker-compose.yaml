@@ -73,13 +73,17 @@ services:
     environment:
       - REDIS_HOST=redis
       - JAVA_API_HOST=java-api
+      - JAVA_API_PORT=8080
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.go-ws.rule=Host(`localhost`) && PathPrefix(`/ws`)"
+      - "traefik.http.routers.go-ws.rule=Host(`localhost`) && PathPrefix(`/go`)"
       - "traefik.http.services.go-ws.loadbalancer.server.port=8080"
-      - "traefik.http.middlewares.go-ws-stripprefix.stripprefix.prefixes=/ws"
-      - "traefik.http.middlewares.go-ws-headers.headers.customrequestheaders.X-Forwarded-Prefix=/ws"
-      - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix,go-ws-headers"
+      - "traefik.http.middlewares.go-ws-stripprefix.stripprefix.prefixes=/go"
+      - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix"
+      # WebSocketサポートを明示的に有効化
+      - "traefik.http.services.go-ws.loadbalancer.passhostheader=true"
+
+
 
   java-api:
     build: ./java-api/myproject

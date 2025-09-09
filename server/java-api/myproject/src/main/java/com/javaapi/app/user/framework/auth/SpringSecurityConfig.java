@@ -4,29 +4,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @Configuration
-@EnableWebSecurity
 public class SpringSecurityConfig {
-
-    private final OIDCSuccessHandler oidcSuccessHandler;
-
-    public SpringSecurityConfig(OIDCSuccessHandler oidcSuccessHandler) {
-        this.oidcSuccessHandler = oidcSuccessHandler;
-        }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable())          // CSRF 無効化
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login/oauth2/code/cognito", "/oauth2/authorization/cognito").permitAll()
-                .requestMatchers("/**").permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()          // 全リクエストを認証不要に
             )
-            .oauth2Login(oauth2 -> oauth2
-                .successHandler(oidcSuccessHandler)
-            );
+            .httpBasic(basic -> basic.disable())    // デフォルトのHTTP Basicも無効化
+            .formLogin(login -> login.disable());   // デフォルトフォームログインも無効化
 
         return http.build();
     }

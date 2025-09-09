@@ -5,21 +5,21 @@ import(
 )
 
 type ChatInformDTO struct {
-	roomID   uuid.UUID `json:"room_id"`
+	roomid   uuid.UUID `json:"roomid"`
 	username string    `json:"username"`
 	image    []byte     `json:"image,omitempty"`
 }
 
-func NewChatInformDTO(roomID uuid.UUID, username string, image []byte) *ChatInformDTO {
+func NewChatInformDTO(roomid uuid.UUID, username string, image []byte) *ChatInformDTO {
 	return &ChatInformDTO{
-		roomID:   roomID,
+		roomid:   roomid,
 		username: username,
 		image:    image,
 	}
 }
 
 func (dto *ChatInformDTO) GetRoomID() uuid.UUID {
-	return dto.roomID
+	return dto.roomid
 }
 
 func (dto *ChatInformDTO) GetUsername() string {

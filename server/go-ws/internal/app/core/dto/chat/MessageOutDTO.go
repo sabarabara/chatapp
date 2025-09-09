@@ -39,20 +39,20 @@ func (m MessageOutDTO) MarshalJSON() ([]byte, error) {
 
 
     return json.Marshal(map[string]interface{}{
-        "messageId": m.messageid,
+        "messageid": m.messageid,
         "message":   m.message,
-        "userId":    m.userid,
-		"roomId":    m.roomid.String(),
+        "userid":    m.userid,
+		"roomid":    m.roomid.String(),
     })
 }
 
 func (m *MessageOutDTO) UnmarshalJSON(data []byte) error {
 
     var tmp struct {
-        MessageID string `json:"messageId"`
+        MessageID string `json:"messageid"`
         Message   string `json:"message"`
-        UserID    string `json:"userId"`
-		RoomID    string `json:"roomId"`
+        UserID    string `json:"userid"`
+		RoomID    string `json:"roomid"`
     }
 
 	log.Println("Raw JSON:", string(data))

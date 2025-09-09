@@ -28,7 +28,7 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 
 	//sessionの取得
 	context := ctx.Request.Context()
-	cookie, err := ctx.Request.Cookie("session_id")
+	cookie, err := ctx.Request.Cookie("SESSION")
 	if err != nil {
 		ctx.String(http.StatusUnauthorized, "no session")
 		return

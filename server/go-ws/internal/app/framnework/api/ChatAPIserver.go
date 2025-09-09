@@ -4,8 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"net/http"
 	"go-ws/internal/app/core/dto/chat"
+	"log"
+	"net/http"
 )
 
 type ChatAPIserver struct {
@@ -43,7 +44,7 @@ func (s *ChatAPIserver) FetchChatInformation(dto *chat.ChatInformDTO) (string, e
 
 func (s *ChatAPIserver) SendMessage(dto *chat.MessageOutNonidDTO) (string, error) {
 	url := s.baseURL + "/conversation/create"
-
+	log.Println("Sending message to URL:", url)
 	body, err := json.Marshal(dto)
 	if err != nil {
 		return "", err

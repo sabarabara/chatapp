@@ -32,8 +32,8 @@ func (m MessageOutNonidDTO) MarshalJSON() ([]byte, error) {
 
 	return json.Marshal(map[string]interface{}{
 		"message":   m.message,
-		"userId":    m.userid,
-		"roomId":    m.roomid.String(),
+		"userid":    m.userid,
+		"roomid":    m.roomid.String(),
 	})
 }
 
@@ -41,8 +41,8 @@ func (m *MessageOutNonidDTO) UnmarshalJSON(data []byte) error {
 
     var tmp struct {
         Message string `json:"message"`
-        UserID  string `json:"userId"`
-        RoomID  string `json:"roomId"`
+        UserID  string `json:"userid"`
+        RoomID  string `json:"roomid"`
     }
 
     if err := json.Unmarshal(data, &tmp); err != nil {
