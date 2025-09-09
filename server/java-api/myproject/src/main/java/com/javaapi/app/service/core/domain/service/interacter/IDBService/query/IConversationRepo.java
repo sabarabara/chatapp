@@ -12,7 +12,7 @@ import com.javaapi.app.service.core.dto.ConversationDTO.IConversationDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
 import com.javaapi.app.service.core.entity.RoomMemberEntity;
 
-public interface IConversationRepo extends JpaRepository<RoomMemberEntity, UUID> {
+public interface IConversationRepo extends JpaRepository<RoomMemberEntity, String> {
 
     @Query("""
     SELECT r2.user
@@ -28,7 +28,7 @@ public interface IConversationRepo extends JpaRepository<RoomMemberEntity, UUID>
       HAVING COUNT(rm2.user.id) = 2
   ) 
     """)
-    List<IConversationDTO> findConnectedUsersInTwoMemberRooms(@Param("userId") UUID userId, Pageable pageable);
+    List<IConversationDTO> findConnectedUsersInTwoMemberRooms(@Param("userId") String userId, Pageable pageable);
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
     @Query("""

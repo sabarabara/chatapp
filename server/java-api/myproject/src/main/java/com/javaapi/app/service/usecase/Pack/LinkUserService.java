@@ -1,7 +1,6 @@
 package com.javaapi.app.service.usecase.Pack;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +28,7 @@ public class LinkUserService {
     }
 
     @Transactional
-    public RoomEntity linkUsersInNewRoom(UUID userId1, UUID userId2) {
+    public RoomEntity linkUsersInNewRoom(String userId1, String userId2) {
         UserEntity user1 = userRepository.findByUserid(userId1);
         if (user1 == null) throw new IllegalArgumentException("User1 not found");
 

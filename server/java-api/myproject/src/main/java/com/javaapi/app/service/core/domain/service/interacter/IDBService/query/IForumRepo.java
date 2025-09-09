@@ -12,7 +12,7 @@ import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.entity.RoomMemberEntity;
 
-public interface IForumRepo extends JpaRepository<RoomMemberEntity, UUID> {
+public interface IForumRepo extends JpaRepository<RoomMemberEntity, String> {
 
     @Query("""
 SELECT r2.room.id AS roomId,
@@ -32,7 +32,7 @@ WHERE r1.user.id = :userId
       HAVING COUNT(rm2.user.id) >= 3
   )
 """)
-    List<IForumDTO> findConnectedUsersInBulletinRooms(@Param("userId") UUID userId, Pageable pageable);
+    List<IForumDTO> findConnectedUsersInBulletinRooms(@Param("userId") String userId, Pageable pageable);
 
     ///////////////////////////////////////
 @Query("""

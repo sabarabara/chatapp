@@ -8,6 +8,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import com.javaapi.app.user.core.domain.service.interacter.DBService.IUserRepo;
+import com.javaapi.app.user.core.dto.UserDTO;
+import com.javaapi.app.user.core.entity.UserEntity;
 import com.javaapi.app.user.framework.session.SessionStore;
 
 import jakarta.servlet.ServletException;
@@ -20,10 +23,12 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
 
     private final SessionStore sessionStore;
     private final IDPLogoutSuccessHandler idpLogoutSuccessHandler;
+    private final IUserRepo userRepo;
 
-    public OIDCSuccessHandler(SessionStore sessionStore, IDPLogoutSuccessHandler idpLogoutSuccessHandler) {
+    public OIDCSuccessHandler(SessionStore sessionStore, IDPLogoutSuccessHandler idpLogoutSuccessHandler, IUserRepo userRepo) {
         this.sessionStore = sessionStore;
         this.idpLogoutSuccessHandler = idpLogoutSuccessHandler;
+        this.userRepo = userRepo;
     }
 
     
@@ -38,12 +43,20 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
 
         // ユーザーIDをUUIDとして取得
-        UUID userId = UUID.fromString(oidcUser.getSubject());
+        String userId = UUID.fromString(oidcUser.getSubject()).toString();
+        String username = oidcUser.getPreferredUsername();
+        String email = oidcUser.getEmail();
+
+
+        UserEntity userEntity = new UserEntity(username, email);
+        userEntity.setUserid(userId);
+        userRepo.save(userEntity);
 
         // セッションにユーザー情報を保存
         sessionStore.setUserid(session, userId);
-        sessionStore.setUsername(session, oidcUser.getPreferredUsername());
-        sessionStore.setEmail(session, oidcUser.getEmail());
+        sessionStore.setUsername(session, username);
+        sessionStore.setEmail(session, email);
+
 
         //idpのsessionを廃棄する
         idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);

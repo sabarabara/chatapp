@@ -4,6 +4,7 @@ WORKDIR /app
 
 # 必要なツールをインストール
 RUN apt-get update && apt-get install -y findutils redis-tools
+RUN apt-get update && apt-get install -y curl
 
 # プロジェクトをコピー
 COPY . .

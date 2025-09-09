@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public interface IConversationDTO {
     UUID getRoomId();
-    UUID getUserId();
+    String getUserId();
     String getUsername();
 }

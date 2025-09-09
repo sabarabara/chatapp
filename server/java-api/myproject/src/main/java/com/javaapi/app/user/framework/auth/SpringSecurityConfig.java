@@ -21,6 +21,7 @@ public class SpringSecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/login/oauth2/code/cognito", "/oauth2/authorization/cognito").permitAll()
+                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

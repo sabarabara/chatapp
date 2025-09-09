@@ -1,7 +1,6 @@
 package com.javaapi.app.service.usecase.Pack;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +43,7 @@ public class PackUsecase {
 
     public List<RandamPackDTO> getRandamPack(HttpSession session) {
       SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-      UUID userId = sessionDTO.getUserId();
+      String userId = sessionDTO.getUserId();
       Userid validUserId = new Userid(userId);
 
       List<IRandamPackDTO> packDTOs = packRepo.findUnmatchedUsers(userId, pageable);
@@ -59,7 +58,7 @@ public class PackUsecase {
 
     public List<RecommnedPackDTO> getRecommendPack(HttpSession session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userId = sessionDTO.getUserId();
+        String userId = sessionDTO.getUserId();
         Userid validUserId = new Userid(userId);
 
         List<RecievedPackDTO> recommendedPacks = packResult.getRecommendedPack(validUserId);

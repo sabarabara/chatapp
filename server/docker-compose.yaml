@@ -85,6 +85,11 @@ services:
     build: ./java-api/myproject
     networks:
       - app-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     depends_on:
       redis:
         condition: service_healthy
@@ -145,6 +150,21 @@ services:
       postgres-rag:
         condition: service_healthy
       postgres-java:
+        condition: service_healthy
+
+
+  ts-seeder:
+    build:
+      context: ./ts-seeder
+      dockerfile: Dockerfile
+    networks:
+      - app-net
+    depends_on:
+      postgres-rag:
+        condition: service_healthy
+      postgres-java:
+        condition: service_healthy
+      java-api:
         condition: service_healthy
 
 networks:

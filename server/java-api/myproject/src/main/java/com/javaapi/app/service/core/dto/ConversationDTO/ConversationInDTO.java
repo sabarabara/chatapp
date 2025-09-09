@@ -7,9 +7,9 @@ public class ConversationInDTO{
 
     private final UUID roomid;
     private final String message;
-    private final UUID userid;
+    private final String userid;
 
-    public ConversationInDTO(UUID roomid, String message, UUID userid) {
+    public ConversationInDTO(UUID roomid, String message, String userid) {
         this.roomid = roomid;
         this.message = message;
         this.userid = userid;
@@ -23,7 +23,7 @@ public class ConversationInDTO{
         return message;
     }
 
-    public UUID getUserid() {
+    public String getUserid() {
         return userid;
     }
 }

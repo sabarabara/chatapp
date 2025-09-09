@@ -60,7 +60,7 @@ public class SettingUsecase {
         String charaType = characterType.getCharacterType(settingsInDTO);
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
         Userid validUserid = new Userid(userid);
 
         //pylogic
@@ -90,7 +90,7 @@ public class SettingUsecase {
 
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
 
         //repo
         Optional<UserProfileEntity> userProfileEntity = userProfileRepo.findById(userid);
@@ -117,7 +117,7 @@ public class SettingUsecase {
         String charaType = characterType.getCharacterType(settingsInDTO);
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
         Userid validUserid = new Userid(userid);
 
         //factory
@@ -131,7 +131,7 @@ public class SettingUsecase {
 
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
 
         //repo
         userProfileRepo.deleteById(userid);

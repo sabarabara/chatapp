@@ -3,7 +3,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public interface IForumMemoryDTO {
-    UUID getUserId();
+    String getUserId();
     String getUsername();
     UUID getRoomId();
     UUID getMessageId();

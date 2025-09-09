@@ -6,11 +6,11 @@ public class ForumOutDTO {
 
     private final UUID messageid;
     private final String message;
-    private final UUID userid;
+    private final String userid;
     private final boolean ispersonal;
     private final String username;
 
-    public ForumOutDTO(UUID messageid, String message, UUID userid, boolean ispersonal, String username) {
+    public ForumOutDTO(UUID messageid, String message, String userid, boolean ispersonal, String username) {
         this.messageid = messageid;
         this.message = message;
         this.userid = userid;
@@ -24,7 +24,7 @@ public class ForumOutDTO {
     public String getMessage() {
         return message;
     }
-    public UUID getUserid() {
+    public String getUserid() {
         return userid;
     }
     public boolean isIspersonal() {

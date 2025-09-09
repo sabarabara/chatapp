@@ -35,7 +35,7 @@ public class ForumUsecase {
     public List<SelectForumDTO> selectForums(HttpSession session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
 
         List<IForumDTO> forumDTOs = forumRepo.findConnectedUsersInBulletinRooms(userid, null);
         //ここからfactoryで変換

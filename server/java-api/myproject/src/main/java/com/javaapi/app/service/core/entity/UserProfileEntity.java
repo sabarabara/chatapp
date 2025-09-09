@@ -2,7 +2,6 @@ package com.javaapi.app.service.core.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -27,7 +26,7 @@ public class UserProfileEntity {
     @Id
     @GeneratedValue
     @Column(name = "user_id", columnDefinition = "uuid")
-    private UUID userId;
+    private String userId;
 
     @Column(name = "blood_type")
     private String bloodType;
@@ -72,7 +71,7 @@ public class UserProfileEntity {
     }
 
     // getter/setter
-    public UUID getUserId() {
+    public String getUserId() {
         return userId;
     }
 

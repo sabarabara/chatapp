@@ -35,7 +35,7 @@ public class ConversationUsecase {
 
     public List<SelectConvDTO> selectConversations(HttpSession session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userid = sessionDTO.getUserId();
+        String userid = sessionDTO.getUserId();
 
         List<IConversationDTO> conversationDTO = conversationRepo.findConnectedUsersInTwoMemberRooms(userid, null);
         //ここからfactoryで変換

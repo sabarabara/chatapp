@@ -6,6 +6,6 @@ import java.util.UUID;
 public interface IForumDTO {
     String getTitle();
     UUID getRoomId();
-    UUID getUserId();
+    String getUserId();
     String getUsername();
 }

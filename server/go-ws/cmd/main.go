@@ -73,5 +73,9 @@ func main() {
 	r := gin.Default()
 	r.GET("/chat/ws", Chatctrl.HandleWebSocket)
 	r.GET("/forum/ws", Forumctrl.HandleWebSocket)
+	// ヘルスチェックエンドポイント
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
 	r.Run(":8083")
 }

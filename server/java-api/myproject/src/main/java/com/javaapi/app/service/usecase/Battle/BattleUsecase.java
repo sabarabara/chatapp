@@ -28,7 +28,7 @@ public class BattleUsecase {
     public List<BattleDTO> getBattleUserDetails(HttpSession session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
-        UUID userId = sessionDTO.getUserId();
+        String userId = sessionDTO.getUserId();
 
         List<BattleDTO> battleDTOs = battleRepository.findOneToOneConversationPartners(userId);
         List<BattleDTO> validbattleDTO = battleUserFactory.createBattleUser(battleDTOs);

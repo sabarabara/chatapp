@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- user_hobbies テーブルを作成
 CREATE TABLE IF NOT EXISTS user_hobbies (
-    user_id UUID NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
     hobby_text TEXT NOT NULL,
     embedding vector(384),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -16,6 +16,6 @@ public interface IRoomRepo extends JpaRepository<RoomEntity, UUID> {
            "JOIN r.members m2 " +
            "WHERE m1.user.userid = :userId1 " +
            "AND m2.user.userid = :userId2")
-    Optional<RoomEntity> findCommonRoom(@Param("userId1") UUID userId1,
-                                        @Param("userId2") UUID userId2);
+    Optional<RoomEntity> findCommonRoom(@Param("userId1") String userId1,
+                                        @Param("userId2") String userId2);
 }
