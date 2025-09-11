@@ -1,4 +1,4 @@
-package com.javaapi.app.service.config;
+/*package com.javaapi.app.service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,3 +13,4 @@ public class SessionConfig {
         return new Jackson2JsonRedisSerializer<>(Object.class);
     }
 }
+*/

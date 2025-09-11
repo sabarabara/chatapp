@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.javaapi.app.user.core.domain.service.interacter.DBService.IUserRepo;
 import com.javaapi.app.user.core.entity.UserEntity;
@@ -60,6 +61,11 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
         //idpのsessionを廃棄する
         idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
 
-        response.sendRedirect("/actuator/health");
+        RestTemplate restTemplate = new RestTemplate();
+        String response2 = restTemplate.getForObject(
+        "http://localhost:5000/callback/?sessionid=" + session.getId(), String.class);
+        System.out.println(response2);
+
+        response.sendRedirect("/");
     }
 }
