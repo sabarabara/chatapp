@@ -1,6 +1,5 @@
 package com.javaapi.app.service.usecase.Setting;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -91,11 +90,13 @@ public class SettingUsecase {
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userid = sessionDTO.getUserId();
+        String username = sessionDTO.getUsername();
 
         //repo
         Optional<UserProfileEntity> userProfileEntity = userProfileRepo.findById(userid);
 
         SettingsOutDTO settingsOutDTO = new SettingsOutDTO(
+            username,
             userProfileEntity.get().getBloodType(),
             userProfileEntity.get().getHeight(),
             userProfileEntity.get().getBirthday().toString(),

@@ -3,20 +3,30 @@ package com.javaapi.app.user.framework.auth;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SpringSecurityConfig {
 
-    @Bean
+    private final OIDCSuccessHandler oidcSuccessHandler;
+
+    public SpringSecurityConfig(OIDCSuccessHandler oidcSuccessHandler) {
+        this.oidcSuccessHandler = oidcSuccessHandler;
+        }
+        @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())          // CSRF 無効化
+
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()          // 全リクエストを認証不要に
+                .requestMatchers("/login/oauth2/code/cognito", "/oauth2/authorization/cognito").permitAll()
+                .requestMatchers("/actuator/**").permitAll()
+                .anyRequest().authenticated()
             )
-            .httpBasic(basic -> basic.disable())    // デフォルトのHTTP Basicも無効化
-            .formLogin(login -> login.disable());   // デフォルトフォームログインも無効化
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oidcSuccessHandler)
+            );
 
         return http.build();
     }

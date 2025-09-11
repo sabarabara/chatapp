@@ -2,6 +2,8 @@ package com.javaapi.app.service.core.dto.SettingsDTO;
 
 public class SettingsIn_textDTO {
 
+    private final String username;
+    private final String characterType;
     private final String bloodType;
     private final int height;
     private final String birthday;
@@ -10,7 +12,9 @@ public class SettingsIn_textDTO {
     private final String dominantHand;
     private final String text;
 
-    public SettingsIn_textDTO(String bloodType, int height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand, String text) {
+    public SettingsIn_textDTO(String username, String characterType, String bloodType, int height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand, String text) {
+        this.username = username;
+        this.characterType = characterType;
         this.bloodType = bloodType;
         this.height = height;
         this.birthday = birthday;
@@ -18,6 +22,12 @@ public class SettingsIn_textDTO {
         this.favoriteColor = favoriteColor;
         this.dominantHand = dominantHand;
         this.text = text;
+    }
+    public String getUsername() {
+        return username;
+    }
+    public String getCharacterType() {
+        return characterType;
     }
     public String getBloodType() {
         return bloodType;

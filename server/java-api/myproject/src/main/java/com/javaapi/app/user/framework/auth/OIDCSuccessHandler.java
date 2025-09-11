@@ -9,7 +9,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import com.javaapi.app.user.core.domain.service.interacter.DBService.IUserRepo;
-import com.javaapi.app.user.core.dto.UserDTO;
 import com.javaapi.app.user.core.entity.UserEntity;
 import com.javaapi.app.user.framework.session.SessionStore;
 
@@ -61,7 +60,6 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
         //idpのsessionを廃棄する
         idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
 
-        // 認証成功後はデフォルトのリダイレクト先へ
-        response.sendRedirect("/");  
+        response.sendRedirect("/actuator/health");
     }
 }

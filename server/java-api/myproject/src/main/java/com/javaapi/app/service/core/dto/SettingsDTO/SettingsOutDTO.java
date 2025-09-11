@@ -2,7 +2,8 @@ package com.javaapi.app.service.core.dto.SettingsDTO;
 
 public class SettingsOutDTO {
 
-    
+
+    private final String username;
     private final String bloodType;
     private final int height;
     private final String birthday;
@@ -11,7 +12,8 @@ public class SettingsOutDTO {
     private final String dominantHand;
     private final String characterType;
 
-    public SettingsOutDTO(String bloodType, int height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand , String characterType) {
+    public SettingsOutDTO(String username,String bloodType, int height, String birthday, String favoriteWeather, String favoriteColor, String dominantHand , String characterType) {
+        this.username = username;
         this.bloodType = bloodType;
         this.height = height;
         this.birthday = birthday;
@@ -43,6 +45,9 @@ public class SettingsOutDTO {
 
     public String getCharacterType() {
         return characterType;
+    }
+    public String getUsername() {
+        return username;
     }
 
 }
