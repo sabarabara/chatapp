@@ -10,7 +10,6 @@ import com.javaapi.app.service.core.dto.BattleDTO.BattleDTO;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class BattleUsecase {
@@ -25,7 +24,7 @@ public class BattleUsecase {
         this.battleRepository = battleRepository;
     }
 
-    public List<BattleDTO> getBattleUserDetails(HttpSession session) {
+    public List<BattleDTO> getBattleUserDetails(String session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userId = sessionDTO.getUserId();

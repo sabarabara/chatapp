@@ -15,8 +15,6 @@ import com.javaapi.app.service.core.dto.ConversationDTO.RoomidDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 import com.javaapi.app.service.usecase.Conversation.ConversationUsecase;
 
-import jakarta.servlet.http.HttpSession;
-
 
 @RestController
 @RequestMapping("/conversation")
@@ -31,7 +29,7 @@ public class ConversationController {
 
     //select page
     @GetMapping("/select")
-    public List<SelectConvDTO> selectConversations(HttpSession session) {
+    public List<SelectConvDTO> selectConversations(String session) {
         return conversationUsecase.selectConversations(session);
     }
 
@@ -43,7 +41,7 @@ public class ConversationController {
     }
 
     @PostMapping("/get")
-    public List<ConversationOutDTO> getConversations(HttpSession session ,@RequestBody RoomidDTO roomiddDto) {
+    public List<ConversationOutDTO> getConversations(String session ,@RequestBody RoomidDTO roomiddDto) {
         return conversationUsecase.getConversations(session, roomiddDto.getRoomid());
     }
 }

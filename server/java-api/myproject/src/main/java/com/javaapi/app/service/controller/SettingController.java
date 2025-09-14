@@ -13,7 +13,7 @@ import com.javaapi.app.service.core.dto.SettingsDTO.SettingsIn_textDTO;
 import com.javaapi.app.service.core.dto.SettingsDTO.SettingsOutDTO;
 import com.javaapi.app.service.usecase.Setting.SettingUsecase;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -28,23 +28,24 @@ public class SettingController {
 
   
   @PostMapping("/create")
-  public String createSetting(@RequestBody SettingsIn_textDTO settingsIn_textDTO,HttpSession session) {
+  public String createSetting(@RequestBody SettingsIn_textDTO settingsIn_textDTO,String session) {
     System.out.println("🐞SettingController.createSetting() called");
     return settingUsecase.createSetting(settingsIn_textDTO,session);
   }
 
   @GetMapping("/read")
-  public SettingsOutDTO readSetting(HttpSession session) {
+  public SettingsOutDTO readSetting(HttpServletRequest request) {
+    String session = request.getHeader("cookie");
     return settingUsecase.readSetting(session);
   }
 
-  @PutMapping("/update")//とりあえずstring
-  public String updateSetting(@RequestBody SettingsInDTO settingsInDTO,HttpSession session) {
+  @PutMapping("/update")
+  public String updateSetting(@RequestBody SettingsInDTO settingsInDTO,String session) {
     return settingUsecase.updateSetting(settingsInDTO,session);
   }
 
   @DeleteMapping("/delete")
-  public String deleteSetting(HttpSession session) {
+  public String deleteSetting(String session) {
     return settingUsecase.deleteSetting(session);
   }
 }

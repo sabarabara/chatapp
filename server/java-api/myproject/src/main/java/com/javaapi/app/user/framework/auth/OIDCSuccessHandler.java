@@ -3,6 +3,7 @@ package com.javaapi.app.user.framework.auth;
 import java.io.IOException;
 import java.util.UUID;
 
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -38,28 +39,27 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
                                         Authentication authentication) throws IOException, ServletException {
 
         HttpSession session = request.getSession();
-
+        System.out.println("🐞sSession ID: " + session.getId());
         // OidcUser を取得
         OidcUser oidcUser = (OidcUser) authentication.getPrincipal();
 
-        // ユーザーIDをUUIDとして取得
-        String userId = UUID.fromString(oidcUser.getSubject()).toString();
-        String username = oidcUser.getPreferredUsername();
-        String email = oidcUser.getEmail();
 
+        String userId = oidcUser.getSubject();
+        String username = "kana";
+        String email = "kana@example.com";
 
         UserEntity userEntity = new UserEntity(username, email);
         userEntity.setUserid(userId);
         userRepo.save(userEntity);
 
-        // セッションにユーザー情報を保存
-        sessionStore.setUserid(session, userId);
-        sessionStore.setUsername(session, username);
-        sessionStore.setEmail(session, email);
+
+        sessionStore.setUserid(session.getId(), userId);
+        sessionStore.setUsername(session.getId(), username);
+        sessionStore.setEmail(session.getId(), email);
 
 
         //idpのsessionを廃棄する
-        idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
+        //idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);
 
         RestTemplate restTemplate = new RestTemplate();
         String response2 = restTemplate.getForObject(

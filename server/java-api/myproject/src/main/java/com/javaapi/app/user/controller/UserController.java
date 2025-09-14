@@ -10,7 +10,6 @@ import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.dto.UserDTO;
 import com.javaapi.app.user.usecase.User.UserUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/users")
@@ -28,7 +27,7 @@ public class UserController {
     };
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody Userid userid,HttpSession session) {
+    public String loginUser(@RequestBody Userid userid,String session) {
         return userUsecase.loginUser(userid, session);
 }
 }

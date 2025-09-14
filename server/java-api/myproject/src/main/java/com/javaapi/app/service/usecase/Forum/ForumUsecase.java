@@ -14,7 +14,6 @@ import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ForumUsecase {
@@ -32,7 +31,7 @@ public class ForumUsecase {
     }
 
 
-    public List<SelectForumDTO> selectForums(HttpSession session) {
+    public List<SelectForumDTO> selectForums(String session) {
 
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userid = sessionDTO.getUserId();
@@ -48,7 +47,7 @@ public class ForumUsecase {
         return forumService.handleForumPost(forumInDTO);
     }
 
-    public List<ForumOutDTO> getForums(UUID roomid, HttpSession session) {
+    public List<ForumOutDTO> getForums(UUID roomid, String session) {
         List<IForumMemoryDTO> forumDTOs = forumRepo.findBulletinMessagesByRoomId(roomid);
         //ここからfactoryで変換
         List<ForumOutDTO> forumOutDTOs = forumFactory.toForumOutDTO(forumDTOs, session);

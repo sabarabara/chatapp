@@ -9,8 +9,6 @@ import com.javaapi.app.user.core.dto.UserDTO;
 import com.javaapi.app.user.core.entity.UserEntity;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
-
 
 @Service
 public class UserUsecase {
@@ -34,7 +32,7 @@ public class UserUsecase {
     }
 
 
-    public String loginUser(Userid userid,HttpSession session) {
+    public String loginUser(Userid userid,String session) {
         UserEntity userEntity = userRepo.findByUserid(userid.getUserid());
 
         SessionDTO sessionDTO = new SessionDTO(

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.framework.session.SessionStore;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class SessionFactory{
@@ -15,7 +14,7 @@ public class SessionFactory{
         this.sessionStore = sessionStore;
     }
 
-    public void createUserSession(SessionDTO sessionDTO,HttpSession session) {
+    public void createUserSession(SessionDTO sessionDTO,String session) {
 
         sessionStore.setUserid(session, sessionDTO.getUserId());
         sessionStore.setUsername(session, sessionDTO.getUsername());

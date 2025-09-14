@@ -18,7 +18,6 @@ import com.javaapi.app.user.core.entity.UserEntity;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 import com.javaapi.app.user.usecase.User.UserFactory;
 
-import jakarta.servlet.http.HttpSession;
 
 
 @Service
@@ -42,7 +41,7 @@ public class SettingUsecase {
         this.userRepository = userRepository;
     }
 
-    public String createSetting(SettingsIn_textDTO settingsIn_textDTO,HttpSession session) {
+    public String createSetting(SettingsIn_textDTO settingsIn_textDTO,String session) {
 
         
         SettingsInDTO settingsInDTO = new SettingsInDTO(
@@ -85,7 +84,7 @@ public class SettingUsecase {
 
 
 
-    public SettingsOutDTO readSetting(HttpSession session) {
+    public SettingsOutDTO readSetting(String session) {
 
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
@@ -112,7 +111,7 @@ public class SettingUsecase {
 
 
 
-    public String updateSetting(SettingsInDTO settingsInDTO,HttpSession session) {
+    public String updateSetting(SettingsInDTO settingsInDTO,String session) {
 
         //pylogic
         String charaType = characterType.getCharacterType(settingsInDTO);
@@ -128,7 +127,7 @@ public class SettingUsecase {
         return "OK";
     }
 
-    public String deleteSetting(HttpSession session) {
+    public String deleteSetting(String session) {
 
         //session
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);

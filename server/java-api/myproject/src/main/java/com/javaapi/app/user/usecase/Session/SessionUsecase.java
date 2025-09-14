@@ -8,8 +8,6 @@ import com.javaapi.app.user.core.domain.model.vo.Username;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.framework.session.SessionStore;
 
-import jakarta.servlet.http.HttpSession;
-
 
 @Service
 public class SessionUsecase{
@@ -23,13 +21,13 @@ public class SessionUsecase{
     }
 
 
-    public String createUserSession(SessionDTO sessionDTO,HttpSession session){
+    public String createUserSession(SessionDTO sessionDTO,String session){
         sessionFactory.createUserSession(sessionDTO,session);
 
         return "OK";
     }
 
-    public SessionDTO getUserSession(HttpSession session){
+    public SessionDTO getUserSession(String session){
 
         String userid = sessionStore.getUserid(session).toString();
         String username = sessionStore.getUsername(session).toString();

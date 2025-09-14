@@ -11,7 +11,6 @@ import com.javaapi.app.service.core.dto.ConversationDTO.IConversationMemoryDTO;
 import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ConversationFactory {
@@ -37,7 +36,7 @@ public class ConversationFactory {
     }
 
     //getConversationsの変換
-    public List<ConversationOutDTO> toConversationOutDTO(HttpSession session, List<IConversationMemoryDTO> dto) {
+    public List<ConversationOutDTO> toConversationOutDTO(String session, List<IConversationMemoryDTO> dto) {
         List<ConversationOutDTO> conversationOutDTOs = new ArrayList<>();
         for (IConversationMemoryDTO conversation : dto) {
 

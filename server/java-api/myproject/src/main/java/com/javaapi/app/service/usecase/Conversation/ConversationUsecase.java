@@ -14,7 +14,6 @@ import com.javaapi.app.service.core.dto.ConversationDTO.SelectConvDTO;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ConversationUsecase {
@@ -33,7 +32,7 @@ public class ConversationUsecase {
 
 
 
-    public List<SelectConvDTO> selectConversations(HttpSession session) {
+    public List<SelectConvDTO> selectConversations(String session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userid = sessionDTO.getUserId();
         List<IConversationDTO> conversationDTO = conversationRepo.findConnectedUsersInTwoMemberRooms(userid, null);
@@ -49,7 +48,7 @@ public class ConversationUsecase {
         return conversationService.handleConversation(conversationInDTO);
     }
 
-    public List<ConversationOutDTO> getConversations(HttpSession session, UUID roomid) {
+    public List<ConversationOutDTO> getConversations(String session, UUID roomid) {
 
         List<IConversationMemoryDTO> conversationMemoryDTOs = conversationRepo.findMessagesByRoomId(roomid);
         //ここからfactoryで変換

@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpSession;
-
 import com.javaapi.app.service.core.dto.BattleDTO.BattleDTO;
 import com.javaapi.app.service.usecase.Battle.BattleUsecase;
 
@@ -23,7 +21,7 @@ public class BattleController {
     }
 
     @GetMapping()
-    public List<BattleDTO> getBattleUser(HttpSession session) {
+    public List<BattleDTO> getBattleUser(String session) {
         return battleUsecase.getBattleUserDetails(session);
     }
 }

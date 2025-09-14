@@ -11,8 +11,6 @@ import com.javaapi.app.service.core.dto.ForumDTO.ForumInDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
 import com.javaapi.app.service.usecase.Forum.ForumUsecase;
-
-import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/forum")
 public class ForumController{
@@ -27,7 +25,7 @@ public class ForumController{
 
     //select page 
     @RequestMapping("/select")
-    public List<SelectForumDTO> selectForums(HttpSession session) {
+    public List<SelectForumDTO> selectForums(String session) {
         return forumUsecase.selectForums(session);
     }
 
@@ -40,7 +38,7 @@ public class ForumController{
     }
 
     @RequestMapping("/get")
-    public List<ForumOutDTO> getForums(@RequestBody UUID roomid, HttpSession session) {
+    public List<ForumOutDTO> getForums(@RequestBody UUID roomid, String session) {
         return forumUsecase.getForums(roomid, session);
     }
 }

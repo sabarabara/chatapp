@@ -16,7 +16,6 @@ import com.javaapi.app.user.core.domain.model.vo.Userid;
 import com.javaapi.app.user.core.dto.SessionDTO;
 import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 
 @Service
@@ -41,7 +40,7 @@ public class PackUsecase {
   }
 
 
-    public List<RandamPackDTO> getRandamPack(HttpSession session) {
+    public List<RandamPackDTO> getRandamPack(String session) {
       SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
       String userId = sessionDTO.getUserId();
       Userid validUserId = new Userid(userId);
@@ -56,7 +55,7 @@ public class PackUsecase {
 
 
 
-    public List<RecommnedPackDTO> getRecommendPack(HttpSession session) {
+    public List<RecommnedPackDTO> getRecommendPack(String session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userId = sessionDTO.getUserId();
         Userid validUserId = new Userid(userId);

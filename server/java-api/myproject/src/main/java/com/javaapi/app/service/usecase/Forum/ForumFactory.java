@@ -9,11 +9,16 @@ import com.javaapi.app.service.core.dto.ForumDTO.ForumOutDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.IForumMemoryDTO;
 import com.javaapi.app.service.core.dto.ForumDTO.SelectForumDTO;
+import com.javaapi.app.user.usecase.Session.SessionUsecase;
 
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class ForumFactory {
+
+    private final SessionUsecase sessionUsecase;
+    public ForumFactory(SessionUsecase sessionUsecase) {
+        this.sessionUsecase = sessionUsecase;
+    }
 
     //selectForumsの変換
     public List<SelectForumDTO> toSelectForumDTO(List<IForumDTO> dto) {
@@ -30,11 +35,10 @@ public class ForumFactory {
     }
 
     //getForumsの変換
-    public List<ForumOutDTO> toForumOutDTO(List<IForumMemoryDTO> dto, HttpSession session) {
+    public List<ForumOutDTO> toForumOutDTO(List<IForumMemoryDTO> dto, String session) {
         List<ForumOutDTO> forumOutDTOs = new ArrayList<>();
         for (IForumMemoryDTO forum : dto) {
-            boolean isPersonal = forum.getUserId().equals((UUID) session.getAttribute("userid"));
-
+            boolean isPersonal = forum.getUserId().equals(sessionUsecase.getUserSession(session).getUserId());
             ForumOutDTO forumOutDTO = new ForumOutDTO(
                     forum.getMessageId(),
                     forum.getMessageContent(),

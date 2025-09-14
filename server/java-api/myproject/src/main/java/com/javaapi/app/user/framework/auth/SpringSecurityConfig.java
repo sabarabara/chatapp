@@ -18,12 +18,11 @@ public class SpringSecurityConfig {
         @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login/oauth2/code/cognito", "/oauth2/authorization/cognito").permitAll()
-                .requestMatchers("/actuator/**").permitAll()
-                .anyRequest().authenticated()
-            )
+        .csrf(csrf -> csrf.disable())
+        .authorizeHttpRequests(auth -> auth
+        .requestMatchers("/login").authenticated()
+        .anyRequest().permitAll()
+        )
             .oauth2Login(oauth2 -> oauth2
                 .successHandler(oidcSuccessHandler)
             );
