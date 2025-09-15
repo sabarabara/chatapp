@@ -12,7 +12,7 @@ public class SessionStoreRedisConfig {
     // SessionStore 用の単独 RedisTemplate
     @Bean
     public RedisTemplate<String, Object> sessionStoreRedisTemplate() {
-        LettuceConnectionFactory factory = new LettuceConnectionFactory("localhost", 6380);
+        LettuceConnectionFactory factory = new LettuceConnectionFactory("redis-session", 6379);
         factory.afterPropertiesSet();
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();

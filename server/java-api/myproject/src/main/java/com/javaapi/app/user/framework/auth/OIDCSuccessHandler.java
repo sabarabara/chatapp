@@ -1,9 +1,7 @@
 package com.javaapi.app.user.framework.auth;
 
 import java.io.IOException;
-import java.util.UUID;
 
-import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -63,7 +61,7 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
 
         RestTemplate restTemplate = new RestTemplate();
         String response2 = restTemplate.getForObject(
-        "http://localhost:5000/callback/?sessionid=" + session.getId(), String.class);
+        "http://host.docker.internal:5022/callback/?sessionid=" + session.getId(), String.class);
         System.out.println(response2);
 
         response.sendRedirect("/");

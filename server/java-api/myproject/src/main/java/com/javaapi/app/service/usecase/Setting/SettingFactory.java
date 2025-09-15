@@ -51,6 +51,8 @@ public class SettingFactory {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
     LocalDate persedBirthday = LocalDate.parse(validBirthday, formatter);
 
+    System.out.println("parsed date: " + persedBirthday); // 確認のために出力
+
     String validBloodType = setting.getBloodyType().getType();
     String validCharacterType = setting.getCharacterType().getType();
     String validdominantHand = setting.getDominantHand().getType();

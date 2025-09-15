@@ -9,6 +9,14 @@ services:
       - "--providers.docker.network=app-net" # Traefikが接続するネットワーク
       - "--providers.docker.exposedByDefault=false" # 明示的に有効化されたサービスのみを公開
       - "--entrypoints.web.address=:80" # HTTPエントリーポイント
+
+
+      - "--log.level=DEBUG"  # ログレベルをDEBUGに設定
+      - "--accesslog=true"  # アクセスログを有効化
+      - "--accesslog.fields.defaultmode=keep"  # デフォルトのアクセスログ
+      - "--accesslog.fields.headers.defaultmode=keep" 
+      - "--accesslog.fields.names.Version=keep"
+
     ports:
       - "80:80"     # HTTPトラフィック
       - "8082:8080"   # Traefikダッシュボード
@@ -94,8 +102,6 @@ services:
       - "traefik.http.routers.go-ws.middlewares=go-ws-stripprefix"
       # WebSocketサポートを明示的に有効化
       - "traefik.http.services.go-ws.loadbalancer.passhostheader=true"
-
-
 
   java-api:
     build: ./java-api/myproject

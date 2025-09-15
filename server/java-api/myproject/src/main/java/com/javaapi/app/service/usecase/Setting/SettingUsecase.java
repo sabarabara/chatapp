@@ -1,4 +1,6 @@
 package com.javaapi.app.service.usecase.Setting;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -94,15 +96,22 @@ public class SettingUsecase {
         //repo
         Optional<UserProfileEntity> userProfileEntity = userProfileRepo.findById(userid);
 
-        SettingsOutDTO settingsOutDTO = new SettingsOutDTO(
-            username,
-            userProfileEntity.get().getBloodType(),
-            userProfileEntity.get().getHeight(),
-            userProfileEntity.get().getBirthday().toString(),
-            userProfileEntity.get().getFavoriteWeather(),
-            userProfileEntity.get().getFavoriteColor(),
-            userProfileEntity.get().getDominantHand(),
-            userProfileEntity.get().getCharacterType()
+
+        String validBirthday = userProfileEntity.get().getBirthday().toString();
+        LocalDate parsedBirthday = LocalDate.parse(validBirthday);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedBirthday = parsedBirthday.format(formatter);
+
+
+    SettingsOutDTO settingsOutDTO = new SettingsOutDTO(
+        username,
+        userProfileEntity.get().getBloodType(),
+        userProfileEntity.get().getHeight(),
+        formattedBirthday,
+        userProfileEntity.get().getFavoriteWeather(),
+        userProfileEntity.get().getFavoriteColor(),
+        userProfileEntity.get().getDominantHand(),
+        userProfileEntity.get().getCharacterType()
         );
 
 

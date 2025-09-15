@@ -1,5 +1,7 @@
 package com.javaapi.app.service.controller;
 
+import java.util.Enumeration;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +37,15 @@ public class SettingController {
 
   @GetMapping("/read")
   public SettingsOutDTO readSetting(HttpServletRequest request) {
+
+    Enumeration<String> headerNames = request.getHeaderNames();
+    while (headerNames.hasMoreElements()) {
+    String name = headerNames.nextElement();
+    System.out.println("HEADER: " + name + " = " + request.getHeader(name));
+  }
+
     String session = request.getHeader("cookie");
+    System.out.println("🐞SettingController.readSetting() called session:" + session);
     return settingUsecase.readSetting(session);
   }
 
