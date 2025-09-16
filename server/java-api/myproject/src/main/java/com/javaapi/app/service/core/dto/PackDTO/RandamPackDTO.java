@@ -1,9 +1,13 @@
 package com.javaapi.app.service.core.dto.PackDTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class RandamPackDTO {
 
-  private final String username;
-  private final String charactertype;
+    @JsonProperty("_randomUserName")
+    private final String username;
+    @JsonProperty("_randomCharacterType")
+    private final String charactertype;
 
     public RandamPackDTO(String username, String charactertype) {
         this.username = username;

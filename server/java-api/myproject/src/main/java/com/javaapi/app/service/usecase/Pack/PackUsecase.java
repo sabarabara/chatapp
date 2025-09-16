@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.javaapi.app.service.core.domain.service.interacter.IDBService.query.IPackRepo;
 import com.javaapi.app.service.core.dto.PackDTO.IRandamPackDTO;
+import com.javaapi.app.service.core.dto.PackDTO.PackDTO;
 import com.javaapi.app.service.core.dto.PackDTO.RandamPackDTO;
 import com.javaapi.app.service.core.dto.PackDTO.RecievedPackDTO;
 import com.javaapi.app.service.core.dto.PackDTO.RecommnedPackDTO;
@@ -27,7 +28,7 @@ public class PackUsecase {
   private final RandamPackFactory randamPackFactory;
   private final RecommendPackFactory recommendPackFactory;
 
-  private final int PACK_COUNT = 5;
+  private final int PACK_COUNT = 1;
   int page = 0;
   Pageable pageable = PageRequest.of(page, PACK_COUNT);
 
@@ -39,29 +40,36 @@ public class PackUsecase {
     this.recommendPackFactory = recommendPackFactory;
   }
 
+    public PackDTO fetchScene(String session) {
+      return new PackDTO(100);
+    }
 
-    public List<RandamPackDTO> getRandamPack(String session) {
+    public void saveGatyaStone(String session, PackDTO dto) {}
+
+    public RandamPackDTO getRandamPack(String session) {
       SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
       String userId = sessionDTO.getUserId();
       Userid validUserId = new Userid(userId);
 
       List<IRandamPackDTO> packDTOs = packRepo.findUnmatchedUsers(userId, pageable);
       List<RandamPackDTO> randamPacks = randamPackFactory.createRandamPacks(packDTOs, validUserId);
+      RandamPackDTO randamPack = randamPacks.get(0);
 
-      return randamPacks;
+      return randamPack;
     }
 
 
 
 
 
-    public List<RecommnedPackDTO> getRecommendPack(String session) {
+    public RecommnedPackDTO getRecommendPack(String session) {
         SessionDTO sessionDTO = sessionUsecase.getUserSession(session);
         String userId = sessionDTO.getUserId();
         Userid validUserId = new Userid(userId);
 
         List<RecievedPackDTO> recommendedPacks = packResult.getRecommendedPack(validUserId);
         List<RecommnedPackDTO> validRecommendedPacks = recommendPackFactory.createRecommendPacks(recommendedPacks, validUserId);
-        return validRecommendedPacks;
+        RecommnedPackDTO recommendPack = validRecommendedPacks.get(0);
+        return recommendPack;
     }
 }
