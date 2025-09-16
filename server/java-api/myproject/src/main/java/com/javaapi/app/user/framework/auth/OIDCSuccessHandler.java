@@ -50,11 +50,7 @@ public class OIDCSuccessHandler implements AuthenticationSuccessHandler {
         userEntity.setUserid(userId);
         userRepo.save(userEntity);
 
-
-        sessionStore.setUserid(session.getId(), userId);
-        sessionStore.setUsername(session.getId(), username);
-        sessionStore.setEmail(session.getId(), email);
-
+        sessionStore.saveSession(session.getId(), userId, username, email);
 
         //idpのsessionを廃棄する
         //idpLogoutSuccessHandler.onLogoutSuccess(request, response, authentication);

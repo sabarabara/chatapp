@@ -30,8 +30,9 @@ public class SettingController {
 
   
   @PostMapping("/create")
-  public String createSetting(@RequestBody SettingsIn_textDTO settingsIn_textDTO,String session) {
+  public String createSetting(@RequestBody SettingsIn_textDTO settingsIn_textDTO,HttpServletRequest request) {
     System.out.println("🐞SettingController.createSetting() called");
+    String session = request.getHeader("cookie");
     return settingUsecase.createSetting(settingsIn_textDTO,session);
   }
 

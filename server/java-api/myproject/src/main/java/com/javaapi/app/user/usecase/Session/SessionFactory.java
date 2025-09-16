@@ -16,8 +16,6 @@ public class SessionFactory{
 
     public void createUserSession(SessionDTO sessionDTO,String session) {
 
-        sessionStore.setUserid(session, sessionDTO.getUserId());
-        sessionStore.setUsername(session, sessionDTO.getUsername());
-        sessionStore.setEmail(session, sessionDTO.getEmail());
+        sessionStore.saveSession(session, sessionDTO.getUserId(), sessionDTO.getUsername(), sessionDTO.getEmail());
     }
 }

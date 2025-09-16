@@ -29,13 +29,12 @@ public class SessionUsecase{
 
     public SessionDTO getUserSession(String session){
 
-        String userid = sessionStore.getUserid(session).toString();
-        String username = sessionStore.getUsername(session).toString();
-        String email = sessionStore.getEmail(session).toString();
+        SessionDTO userInfo = sessionStore.getUserInfo(session);
 
-        Userid valUserid = new Userid(userid);
-        Username valUsername = new Username(username);
-        Email valEmail = new Email(email);
+        System.out.println("🐞 Retrieved UserInfo: userId=" + userInfo.getUserId());
+        Userid valUserid = new Userid(userInfo.getUserId());
+        Username valUsername = new Username(userInfo.getUsername());
+        Email valEmail = new Email(userInfo.getEmail());
 
         SessionDTO sessionDTO = new SessionDTO(valUserid.getUserid(), valUsername.getUsername(), valEmail.getEmail());
         return sessionDTO;
