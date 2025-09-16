@@ -81,7 +81,7 @@ services:
       postgres-java:
         condition: service_healthy
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=redis-session
       - JAVA_API_HOST=java-api
       - JAVA_API_PORT=8080
     labels:

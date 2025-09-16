@@ -2,10 +2,10 @@ package session
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
 	dto "go-ws/internal/app/core/dto/session"
 	"go-ws/pkg/config/redis"
+	"log"
 )
 
 type SessionStore struct {
@@ -16,18 +16,13 @@ func NewSessionStore(rdb *redis.RedisClient) *SessionStore {
 	return &SessionStore{rdb: rdb}
 }
 
-func (s *SessionStore) GetSession(ctx context.Context, encodedSessionID string) (*dto.SessionDTO, error) {
-	
-	data, err := base64.URLEncoding.DecodeString(encodedSessionID)
-	if err != nil {
-		return nil, err
-	}
-	sessionID := string(data)
+func (s *SessionStore) GetSession(ctx context.Context, sessionid string) (*dto.SessionDTO, error) {
 
-	key := "spring:session:sessions:" + sessionID
+	key := "user:session:" + sessionid
 
-	// Redis ハッシュ取得
-	val, err := s.rdb.HGetAll(ctx, key).Result()
+	log.Println("Fetching session with key:", key)
+
+	val, err := s.rdb.HGetAllAsMap(ctx, key)
 	if err != nil {
 		return nil, err
 	}
@@ -35,15 +30,14 @@ func (s *SessionStore) GetSession(ctx context.Context, encodedSessionID string) 
 		return nil, nil
 	}
 
-	// sessionAttr:* だけ取り出して DTO に変換
 	session := &dto.SessionDTO{}
 	for k, v := range val {
 		switch k {
-		case "sessionAttr:userId":
+		case "userId":
 			json.Unmarshal([]byte(v), &session.UserID)
-		case "sessionAttr:username":
+		case "username":
 			json.Unmarshal([]byte(v), &session.Username)
-		case "sessionAttr:email":
+		case "email":
 			json.Unmarshal([]byte(v), &session.Email)
 		}
 	}

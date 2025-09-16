@@ -27,7 +27,9 @@ public class UserController {
     };
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody Userid userid,String session) {
+    public String loginUser(@RequestBody Userid userid) {
+        String session = java.util.UUID.randomUUID().toString();
+        System.out.println("🐞 Generated Session ID: " + session);
         return userUsecase.loginUser(userid, session);
 }
 }

@@ -2,7 +2,7 @@ package redis
 
 import (
 	"context"
-
+	"encoding/json"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -17,9 +17,25 @@ func NewRedisClient(addr string) *RedisClient {
 	return &RedisClient{client: rdb}
 }
 
-func (r *RedisClient) HGetAll(ctx context.Context, key string) *redis.MapStringStringCmd {
-	return r.client.HGetAll(ctx, key)
+func (r *RedisClient) HGetAllAsMap(ctx context.Context, key string) (map[string]string, error) {
+	// STRING 型を取得
+	valStr, err := r.client.Get(ctx, key).Result()
+	if err != nil {
+		if err == redis.Nil {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	// JSON を map[string]string に変換
+	var m map[string]string
+	if err := json.Unmarshal([]byte(valStr), &m); err != nil {
+		return nil, err
+	}
+
+	return m, nil
 }
+
 
 func (r *RedisClient) Ping(ctx context.Context) (string, error) {
 	return r.client.Ping(ctx).Result()

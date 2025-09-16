@@ -28,13 +28,13 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 
 	//sessionの取得
 	context := ctx.Request.Context()
-	cookie, err := ctx.Request.Cookie("SESSION")
-	if err != nil {
+	cookie := ctx.Request.Header.Get("cookie")
+	if cookie == "" {
 		ctx.String(http.StatusUnauthorized, "no session")
 		return
 	}
 
-	sessionDTO, err := c.SessionUsecase.GetSession(context, cookie.Value)
+	sessionDTO, err := c.SessionUsecase.GetSession(context, cookie)
 	if err != nil {
 		ctx.String(http.StatusUnauthorized, "invalid session")
 		return
