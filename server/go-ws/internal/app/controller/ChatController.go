@@ -33,15 +33,12 @@ func (c *ChatController) HandleWebSocket(ctx *gin.Context) {
 		ctx.String(http.StatusUnauthorized, "no session")
 		return
 	}
-
+	log.Println("Cookie:", cookie)
 	sessionDTO, err := c.SessionUsecase.GetSession(context, cookie)
 	if err != nil {
 		ctx.String(http.StatusUnauthorized, "invalid session")
 		return
 	}
-
-	
-
 	// upgrade
 	conn, err := ws.Upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {

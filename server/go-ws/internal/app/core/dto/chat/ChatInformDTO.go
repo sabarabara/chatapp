@@ -35,4 +35,3 @@ func (dto *ChatInformDTO) GetImageBase64() string {
 	}
 	return string(dto.image)
 }
-

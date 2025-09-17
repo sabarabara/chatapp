@@ -29,6 +29,7 @@ public class ConversationFactory {
             SelectConvDTO selectConvDTO = new SelectConvDTO(
                     conversation.getRoomId(),
                     conversation.getUsername()
+                    , "https://placehold.jp/150x150.png"
             );
             selectConvDTOs.add(selectConvDTO);
         }
@@ -52,7 +53,7 @@ public class ConversationFactory {
             ConversationOutDTO conversationOutDTO = new ConversationOutDTO(
                     conversation.getMessageId(),
                     conversation.getMessageContent(),
-                    conversation.getUserId(),
+                    "https://placehold.jp/150x150.png",
                     isPersonal,
                     conversation.getUsername()
             );

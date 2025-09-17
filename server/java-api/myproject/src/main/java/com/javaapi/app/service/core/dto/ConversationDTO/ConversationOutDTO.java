@@ -2,18 +2,25 @@ package com.javaapi.app.service.core.dto.ConversationDTO;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ConversationOutDTO {
 
+    @JsonProperty("_messageID")
     private final UUID messageid;
+    @JsonProperty("_message")
     private final String message;
-    private final String userid;
+    @JsonProperty("_imageURL")
+    private final String url;
+    @JsonProperty("_isPerson")
     private final boolean ispersonal;
+    @JsonProperty("_userName")
     private final String username;
 
-    public ConversationOutDTO(UUID messageid, String message, String userid, boolean ispersonal, String username) {
+    public ConversationOutDTO(UUID messageid, String message, String url, boolean ispersonal, String username) {
         this.messageid = messageid;
         this.message = message;
-        this.userid = userid;
+        this.url = url;
         this.ispersonal = ispersonal;
         this.username = username;
     }
@@ -24,8 +31,8 @@ public class ConversationOutDTO {
     public String getMessage() {
         return message;
     }
-    public String getUserid() {
-        return userid;
+    public String getUrl() {
+        return url;
     }
     public boolean isIspersonal() {
         return ispersonal;
