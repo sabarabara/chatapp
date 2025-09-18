@@ -2,12 +2,12 @@ package chat
 
 import (
 	"encoding/json"
-	"log"
-	"strings"
 	"go-ws/internal/app/core/dto/chat"
+	"go-ws/internal/app/core/dto/session"
 	"go-ws/internal/app/framnework/api"
 	"go-ws/internal/app/framnework/redis"
-	"go-ws/internal/app/core/dto/session"
+	"log"
+	"strings"
 )
 
 type ChatUsecase struct {
@@ -34,15 +34,16 @@ func (uc *ChatUsecase) FetchChatInformation(dto *chat.ChatInformDTO) (string, er
 
 /////////////////////////////////////////////////////////////////////////////////
 
-func (uc *ChatUsecase) SendMessage(sessiondto *session.SessionDTO, dto *chat.MessageOutNonidDTO, roomHub *hub.Hub) (string, error) {
+func (uc *ChatUsecase) SendMessage(sessiondto *session.SessionDTO, dto *chat.MessageParseDTO, roomHub *hub.Hub) (string, error) {
 
+	parsedto := chat.NewMessageOutNonidDTO(dto.GetRoomID(), dto.GetMessage(), sessiondto.UserID)
 	//ここでmessageidをjavaapiから受け取る
-	messageid, err := uc.api.SendMessage(dto)
+	messageid, err := uc.api.SendMessage(parsedto)
 	if err != nil {
 		return "", err
 	}
 
-	validatedDTO, err := uc.factory.ValidatedOutUser(dto,messageid)
+	validatedDTO, err := uc.factory.ValidatedOutUser(parsedto,messageid)
 	if err != nil {
 		return "", err
 	}

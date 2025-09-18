@@ -47,7 +47,7 @@ func (f *ChatFactory) ValidatedOutUser(dto *chat.MessageOutNonidDTO, messageId s
 
 	roomid := dto.GetRoomID()
 	message := dto.GetMessage()
-	userid := dto.GetUserID()
+	userid := ""
 
 	validroomid := vo.NewRoomId(roomid)
 	validmessage := vo.NewMessage(message)

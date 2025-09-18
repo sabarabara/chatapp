@@ -2,7 +2,6 @@ package session
 
 import (
 	"context"
-	"encoding/json"
 	dto "go-ws/internal/app/core/dto/session"
 	"go-ws/pkg/config/redis"
 	"log"
@@ -17,30 +16,24 @@ func NewSessionStore(rdb *redis.RedisClient) *SessionStore {
 }
 
 func (s *SessionStore) GetSession(ctx context.Context, sessionid string) (*dto.SessionDTO, error) {
+    key := "user:session:" + sessionid
+    log.Println("Fetching session with key:", key)
 
-	key := "user:session:" + sessionid
+    val, err := s.rdb.HGetAllAsMap(ctx, key)
+    if err != nil {
+        return nil, err
+    }
+    if len(val) == 0 {
+        return nil, nil
+    }
 
-	log.Println("Fetching session with key:", key)
+    session := &dto.SessionDTO{
+        UserID:   val["userId"],
+        Username: val["username"],
+        Email:    val["email"],
+    }
 
-	val, err := s.rdb.HGetAllAsMap(ctx, key)
-	if err != nil {
-		return nil, err
-	}
-	if len(val) == 0 {
-		return nil, nil
-	}
-
-	session := &dto.SessionDTO{}
-	for k, v := range val {
-		switch k {
-		case "userId":
-			json.Unmarshal([]byte(v), &session.UserID)
-		case "username":
-			json.Unmarshal([]byte(v), &session.Username)
-		case "email":
-			json.Unmarshal([]byte(v), &session.Email)
-		}
-	}
-
-	return session, nil
+    log.Println("Retrieved session:", session)
+    return session, nil
 }
+
