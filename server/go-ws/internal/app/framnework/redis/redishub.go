@@ -31,11 +31,6 @@ func NewHub(roomID string, redis ICachehub.PubSubClient) *Hub {
 
 func (h *Hub) run(roomID string) {
 	for msg := range h.Broadcast {
-		// ローカルクライアントに送信
-		for client := range h.Clients {
-			client.Send <- msg
-		}
-		// Redis にも送信
 		h.Redis.Publish(roomID, msg)
 	}
 }
